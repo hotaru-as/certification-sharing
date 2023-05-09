@@ -1,0 +1,104 @@
+@startuml
+
+entity user {
+    id : number 
+    --
+    name : text
+    email : text
+    password_hash : text
+}
+
+entity user_profile {
+    uesr_id : number <<FK>>
+    --
+    intruduction : text
+    birth_day : TIMESTAMP
+    icon_url : text
+}
+
+entity follower {
+    id : number
+    --
+    follow_user : number <<FK>>
+    followed_user : number <<FK>>
+    created_at : TIMESTAMP
+}
+
+entity record_category {
+    id : number
+    --
+    name : text
+}
+
+entity certification {
+    id : number
+    --
+    name : text
+    detail : text
+}
+
+entity certification_record {
+    id : number
+    --
+    user : number <<FK>>
+    certification : number <<FK>>
+    result : boolean
+    exam_date : TIMESTAMP
+    comment : text
+    created_at : TIMESTAMP
+}
+
+entity target_status {
+    id : number
+    --
+    name : text
+}
+
+entity target_record {
+    id : number
+    --
+    user_id : number <<FK>>
+    target : text
+    target_date : TIMESTAMP
+    status_id : number
+    comment : text
+    created_at : TIMESTAMP
+    modified_at : TIMESTAMP
+}
+
+entity study_record {
+    id : number 
+    --
+    user_id: number <<FK>>
+    content : text
+    time : TIMESTAMP
+    comment : text
+    created_at : TIMESTAMP
+}
+
+entity like {
+    id : number
+    --
+    like_user : number
+    record_category : number <<FK>>
+    record_id : number <<FK>>
+}
+
+user ||--|| user_profile
+user ||--|{ follower
+
+certification ||--|{ certification_record
+
+user ||--|{ certification_record
+user ||--|{ target_record
+user ||--|{ study_record
+
+target_status ||--|{ target_record
+
+like }|--|| certification_record
+like }|--|| target_record
+like }|--|| study_record
+like }|--|| record_category
+like }|--|| user
+
+@enduml
