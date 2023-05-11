@@ -1,0 +1,251 @@
+openapi: "3.0.3"
+
+info:
+  title: "certification-sharing-api"
+  description: "certification-sharing-api"
+  version: "1.0.0"
+
+paths:
+  "/api/register/":
+    post:
+      parameters: 
+        - name: username
+          in: path
+          required: true
+          schema: {type: string}
+        - name: email
+          in: path
+          required: true
+          schema: {type: string}
+        - name: password
+          in: path
+          required: true
+          schema: {type: string}
+      responses: 
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    example: "hotaru"
+                  email:
+                    type: string
+                    example: "hotaru@hotaru.com"
+
+  "/api/login/":
+    post:
+      parameters: 
+        - name: username
+          in: path
+          required: true
+          schema: {type: string}
+        - name: password
+          in: path
+          required: true
+          schema: {type: string}
+      responses: 
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  refresh:
+                    type: string
+                    example: "xxxxx"
+                  access:
+                    type: string
+                    example: "xxxxx"
+
+  "/api/users/{userId}/":
+    get:
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: {type: integer}
+      responses: 
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                    example: 1
+                  username:
+                    type: string
+                    example: "hotaru"
+
+  "/api/users/{userId}/profiles/":
+    get:
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: {type: integer}
+      responses: 
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                    example: 1
+                  intruduction:
+                    type: string
+                    example: "よろしくお願いします"
+                  birth_day:
+                    type: string
+                    example: "2023/05/10"
+                  icon_url:
+                    type: string
+                    example: "hotaru"
+
+  "/api/users/{userId}/certifications":
+    get:
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses: 
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                    example: 1
+    post:
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: {type: integer}
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+      responses: 
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                    example: 1
+
+  "/users/{userId}/targets/":
+    get:
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses: 
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                    example: 1
+    post:
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: {type: integer}
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+      responses: 
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                    example: 1
+
+  "/users/{userId}/studies/":
+    get:
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses: 
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                    example: 1
+    post:
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: {type: integer}
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+      responses: 
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: integer
+                    example: 1
+
+
+servers: []
+
+tags: []
+components: {}
