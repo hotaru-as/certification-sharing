@@ -1,19 +1,27 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import Link from 'next/link'
+import { PostType } from '../type/Post.type'
+import TimeLine from '../components/TimeLine'
+import LoginPrompt from '../components/LoginPrompt'
 
-const Home: NextPage = () => {
+const Home: NextPage<{staticPosts: any}> = ({staticPosts}) => {
+  const isLogin = true;
   return (
     <div>
-      <Link href="/login">
-        <a>
-          Login
-        </a>
-      </Link>
+      {isLogin
+        ? <TimeLine staticPosts={staticPosts}/>
+        : <LoginPrompt />
+      }
     </div>
   )
 }
 
 export default Home
+
+export async function getStaticProps() {
+  const staticPosts = {}; //タイムラインの情報を取ってくる
+
+  return {
+    props: { staticPosts },
+    revalidate: 3,
+  }
+}
