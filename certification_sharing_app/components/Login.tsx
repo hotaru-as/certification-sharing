@@ -1,14 +1,21 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { login } from "../lib/accounts";
 
 export default function Login() {
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+  const router = useRouter();
 
-  const authUser = (e: any) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const authUser = async (e: any) => {
     e.preventDefault();
-    login(username, password)
+    const isLogin = await login(username, password)
+    if (isLogin)
+    {
+      router.push('/')
+    }
   }
 
   return (

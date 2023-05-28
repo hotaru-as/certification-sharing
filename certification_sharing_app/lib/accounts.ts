@@ -2,7 +2,7 @@ import Cookie from "universal-cookie";
 
 const cookie = new Cookie();
 
-export async function login(username: string, password: string) {
+export async function login(username: string, password: string): Promise<boolean> {
   try{
     await fetch(
       `${process.env.NEXT_PUBLIC_RESTAPI_URL}accounts/auth/jwt/create/`,
@@ -24,15 +24,15 @@ export async function login(username: string, password: string) {
     .then((data) => {
       const options = { path: "/" };
       cookie.set("access_token", data.access, options);
-      console.log("login complete")
     })
-    // router.push("/main-page")
+    return true;
   } catch(err) {
     alert(err);
+    return false;
   }
 }
 
-export async function register(username: string, password: string)
+export async function register(username: string, password: string): Promise<boolean>
 {
   try{
     await fetch(
@@ -49,9 +49,10 @@ export async function register(username: string, password: string)
       if (res.status === 400) {
         throw "authentication failed";
       }
-      console.log("register complete");
     });
+    return true;
   } catch(err) {
     alert(err);
+    return false;
   }
 }
