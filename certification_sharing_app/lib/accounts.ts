@@ -58,7 +58,7 @@ export async function register(username: string, password: string): Promise<bool
   }
 }
 
-export async function getUser()
+export async function getOwnUser()
 {
   try{
     const data = await fetch(
@@ -109,4 +109,30 @@ export async function getAllUserIds() {
       }
     }
   })
+}
+
+export async function getUser(id: string)
+{
+  try{
+    const userInfo = await fetch(
+      `${process.env.NEXT_PUBLIC_RESTAPI_URL}accounts/users/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },  
+      }
+    )
+    .then((res) => {
+      if (res.status === 400) {
+        throw "authentication failed";
+      } else if (res.ok) {
+        return res.json()
+      }
+    });
+    return userInfo;
+  } catch(err) {
+    alert(err);
+    return null;
+  }  
 }

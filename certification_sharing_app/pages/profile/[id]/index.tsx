@@ -5,10 +5,19 @@ import RecordItem from '../../../components/RecordItem'
 import { TargetType } from '../../../type/Target.type'
 import { RecordType } from '../../../type/Record.type'
 import { CertificationType } from '../../../type/Certification.type'
-import { useState } from 'react'
-import { getAllUserIds } from '../../../lib/accounts'
+import { useEffect, useState } from 'react'
+import { getAllUserIds, getOwnUser, getUser } from '../../../lib/accounts'
+import { getUserProfile } from '../../../lib/apis'
+import { UserInfoType } from '../../../type/UserInfo.type'
+import Link from 'next/link'
 
-const ProfilePage: NextPage = () => {
+type profileType = {
+  userInfo: any,
+  userProfile: any;
+  targets: any;
+}
+
+const ProfilePage: NextPage<profileType> = ({userInfo, userProfile, targets}) => {
   // 実際は引数で渡す
   const staticTargets: TargetType[] = []
   const staticRecords: RecordType[] = []
@@ -19,8 +28,27 @@ const ProfilePage: NextPage = () => {
   // )
 
   const [followerNum, setFollowerNum] = useState(0);
+  const [isOwnUser, setIsOwnUser] = useState(false);
 
-  const isOwnUser = false;
+  useEffect(() => {
+    verifyIsOwnUser();
+  }, [])
+
+  const verifyIsOwnUser = async () => {
+    const ownUser: UserInfoType = await getOwnUser();
+
+    if(ownUser == null){
+      setIsOwnUser(false);
+      return;
+    }
+
+    if(ownUser.user_id == userInfo.id)
+    {
+      setIsOwnUser(true);
+      return;
+    }
+    setIsOwnUser(false);
+  }
 
   const updateFollowerNum = () => {
     setFollowerNum(followerNum + 1);
@@ -28,22 +56,20 @@ const ProfilePage: NextPage = () => {
     //データベースも更新する
   }
 
-  const temp = async () => {
-    await getAllUserIds();
-  }
-
   return (
     <>
-      <button onClick={() => temp()}>アイコン</button>
-      <p>ユーザー名</p>
-      <p>メッセージ</p>
+      <p>アイコン</p>
+      <p>{userInfo.username}</p>
+      <p>メッセージ: {userProfile.introduction}</p>
 
       <p>フォロー: 10</p>
       <p>フォロワー: {followerNum}</p>
 
       {isOwnUser 
+        && <Link href={`/profile/${userInfo.id}/profile-edit`}>プロフィールを編集する</Link>}
+
+      {isOwnUser 
         || <button onClick={() => updateFollowerNum()}>フォローする</button>}
-      
 
       <p>目標</p>
       {/* <TargetItem target={staticTargets[0]}/> */}
@@ -65,14 +91,20 @@ const ProfilePage: NextPage = () => {
 
 export default ProfilePage;
 
-export async function getStaticProps() {
-  const staticTargets: TargetType[] = [] //ユーザーの目標一覧
+export async function getStaticProps({ params }: any) {
+  const userInfo = await getUser(params.id);
+  const userProfile = await getUserProfile(params.id);
+
+  const targets: TargetType[] = [] //ユーザーの目標一覧
   const staticRecords: RecordType[] = [] //ユーザーの勉強記録一覧
   const staticCertifications: CertificationType[] = [] //ユーザーの資格受験結果一覧
-  const staticUserProfile = []; //ユーザーのプロフィール情報
 
   return {
-    props: { staticTargets },
+    props: { 
+      userInfo,
+      userProfile,
+      targets,
+    },
     revalidate: 3,
   }
 }

@@ -11,3 +11,8 @@ class ListUserView(generics.ListAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = (AllowAny,)
     queryset = CustomUser.objects.all()
+
+class RetrieveUserView(generics.RetrieveAPIView):
+    serializer_class = CustomUserSerializer
+    permission_classes = (AllowAny,)
+    queryset = CustomUser.objects.all()

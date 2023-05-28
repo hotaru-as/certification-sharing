@@ -10,3 +10,8 @@ class UpdateUserProfileView(generics.RetrieveUpdateAPIView):
     def get_queryset(self):
         print(self.request.user, self.request.user.id)
         return UserProfile.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            self.permission_classes = (AllowAny,)
+        return super(UpdateUserProfileView, self).get_permissions()
