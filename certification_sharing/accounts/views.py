@@ -6,3 +6,8 @@ from .models import CustomUser
 class CreateUserView(generics.CreateAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = (AllowAny,)
+
+class ListUserView(generics.ListAPIView):
+    serializer_class = CustomUserSerializer
+    permission_classes = (AllowAny,)
+    queryset = CustomUser.objects.all()

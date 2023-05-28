@@ -3,7 +3,7 @@ from accounts.models import CustomUser
 
 class UserProfile(models.Model):
     user_id = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
-    instruction = models.TextField(verbose_name='自己紹介', max_length=1000, null=True, blank=True)
+    introduction = models.TextField(verbose_name='自己紹介', max_length=1000, null=True, blank=True)
     birth_day = models.DateField(verbose_name='誕生日', null=True, blank=True)
     icon_url = models.CharField('アイコン画像', max_length=100, null=True, blank=True)
 
