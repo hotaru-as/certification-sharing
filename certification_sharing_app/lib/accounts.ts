@@ -1,5 +1,6 @@
 import Cookie from "universal-cookie";
 import { UserInfoType } from "../type/UserInfo.type";
+import { createUserProfile } from "./apis";
 
 const cookie = new Cookie();
 

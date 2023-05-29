@@ -1,9 +1,10 @@
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { getAllUserIds, getOwnUser, getUser } from '../../../lib/accounts'
-import { getUserProfile } from '../../../lib/apis'
+import { getUserProfile, updateUserPofile } from '../../../lib/apis'
 import { UserInfoType } from '../../../type/UserInfo.type'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 type profileType = {
   userInfo: any,
@@ -11,7 +12,12 @@ type profileType = {
 }
 
 const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
+  const router = useRouter();
+
   const [isOwnUser, setIsOwnUser] = useState(false);
+  const [introduction, setIntroduction] = useState(userProfile.introduction);
+  const [birthDay, setBirthDay] = useState(userProfile.birth_day)
+  const [iconUrl, setIconUrl] = useState(userProfile.icon_url)
 
   useEffect(() => {
     verifyIsOwnUser();
@@ -33,16 +39,29 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
     setIsOwnUser(false);    
   }
 
+  const updateUserProfile = async () => {
+    await updateUserPofile(userInfo.id, introduction, birthDay, iconUrl);
+  }
+
   return (
     <>
     {
       isOwnUser &&
       (<>
-        <p>アイコン</p>
-        <p>メッセージ</p>
-        <p>誕生日</p>
+        <label className="input">アイコン
+          <input type="text" placeholder={iconUrl}
+            onChange={evt => setIconUrl(evt.target.value)}></input>
+        </label>
+        <label className="input">自己紹介
+          <input type="text" placeholder={introduction}
+            onChange={evt => setBirthDay(evt.target.value)}></input>
+        </label>
+        <label className="input">誕生日
+          <input type="date" placeholder={birthDay}
+            onChange={evt => setIntroduction(evt.target.value)}></input>
+        </label>
         <button>更新</button>
-        <button>キャンセル</button>
+        <button onClick={() => router.back()}>キャンセル</button>
       </>)
     }
     </>

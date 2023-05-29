@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { login, register } from "../lib/accounts";
+import { getOwnUser, login, register } from "../lib/accounts";
+import { UserInfoType } from "../type/UserInfo.type";
+import { createUserProfile } from "../lib/apis";
 
 export default function Register() {
   const router = useRouter();
@@ -14,7 +16,9 @@ export default function Register() {
     if(isRegistered)
     {
       const isLogin = await login(username, password);
-      if (isLogin)
+      const userInfo: UserInfoType = await getOwnUser();
+      const create = await createUserProfile(userInfo.user_id);
+        if (isLogin)
       {
         router.push('/')
       }
