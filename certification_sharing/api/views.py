@@ -7,6 +7,7 @@ from .models import UserProfile
 class UpdateUserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer
     # queryset = UserProfile.objects.all()
+    permission_classes = (AllowAny,)
 
     def get_queryset(self):
         print(self.request.user, self.request.user.id)
@@ -21,6 +22,7 @@ class CreateUserProfileView(generics.CreateAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = (AllowAny,)
     def create(self, request, *args, **kwargs):
+        # Custom permission 作る？
         if (str(request.data['user_id']) != str(self.request.user.id)):
             http_status = status.HTTP_401_UNAUTHORIZED
             return Response(status=http_status)

@@ -40,6 +40,9 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
   }
 
   const updateUserProfile = async () => {
+    console.log(birthDay)
+    console.log(typeof(birthDay))
+    console.log(iconUrl)
     await updateUserPofile(userInfo.id, introduction, birthDay, iconUrl);
   }
 
@@ -54,13 +57,13 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
         </label>
         <label className="input">自己紹介
           <input type="text" placeholder={introduction}
-            onChange={evt => setBirthDay(evt.target.value)}></input>
+            onChange={evt => setIntroduction(evt.target.value)}></input>
         </label>
         <label className="input">誕生日
           <input type="date" placeholder={birthDay}
-            onChange={evt => setIntroduction(evt.target.value)}></input>
+            onChange={evt => setBirthDay(evt.target.value)}></input>
         </label>
-        <button>更新</button>
+        <button onClick={() => updateUserProfile()}>更新</button>
         <button onClick={() => router.back()}>キャンセル</button>
       </>)
     }

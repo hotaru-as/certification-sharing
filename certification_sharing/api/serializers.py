@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import UserProfile, Follower, RecordCategory, Certification, CertificationRecord,  TargetStatus, TargetRecord, StudyRecord
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    birth_day = serializers.DateTimeField(format="%Y-%m-%d", required=False)
     class Meta:
         model = UserProfile
         fields = ('user_id', 'introduction', 'birth_day', 'icon_url')

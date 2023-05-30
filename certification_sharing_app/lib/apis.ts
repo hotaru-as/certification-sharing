@@ -65,16 +65,19 @@ export async function updateUserPofile(id: number, introduction: string, birthDa
     const userProfile = await fetch(
       `${process.env.NEXT_PUBLIC_RESTAPI_URL}api/users/${id}/profile/`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `JWT ${cookie.get("access_token")}`
         },
         body: JSON.stringify({
-          "introduction": introduction,
-          // "birth_day": birthDay,
-          "birth_day": null,
-          "icon_url": iconUrl,
+          "user_id": id,
+          // "introduction": introduction,
+          "introduction": null,
+          "birth_day": birthDay,
+          // "birth_day": null,
+          // "icon_url": iconUrl,
+          "icon_url": null,
         })
       }
     )
