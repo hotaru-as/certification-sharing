@@ -13,16 +13,25 @@ export async function getUserProfile(id: string) {
       }
     )
     .then((res) => {
-      if (res.status === 400) {
-        throw "authentication failed";
-      } else if (res.ok) {
+      if (res.ok) {
         return res.json()
+      } else {
+        return {
+          user_id: id,
+          introduction: "",
+          birth_day: "",
+          icon_url: ""
+        };
       }
     });
     return userProfile;
   } catch(err) {
-    alert(err);
-    return null;
+    return {
+      user_id: id,
+      introduction: "",
+      birth_day: "",
+      icon_url: ""
+    };
   }
 }
 
@@ -72,12 +81,9 @@ export async function updateUserPofile(id: number, introduction: string, birthDa
         },
         body: JSON.stringify({
           "user_id": id,
-          // "introduction": introduction,
-          "introduction": null,
+          "introduction": introduction,
           "birth_day": birthDay,
-          // "birth_day": null,
-          // "icon_url": iconUrl,
-          "icon_url": null,
+          "icon_url": iconUrl,
         })
       }
     )

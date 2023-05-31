@@ -87,7 +87,11 @@ export async function getOwnUser()
   } catch(err) {
     alert(err);
   }
-  return null;
+  const userInfo: UserInfoType = {
+    user_id: undefined,
+    user_name: undefined
+  };
+  return userInfo;
 }
 
 export async function getAllUserIds() {

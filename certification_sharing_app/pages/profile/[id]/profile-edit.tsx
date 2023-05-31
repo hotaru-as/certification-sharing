@@ -24,7 +24,7 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
   }, [])
 
   const verifyIsOwnUser = async () => {
-    const ownUser: UserInfoType = await getOwnUser();
+    const ownUser: UserInfoType= await getOwnUser();
 
     if(ownUser == null){
       setIsOwnUser(false);
@@ -44,6 +44,7 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
     console.log(typeof(birthDay))
     console.log(iconUrl)
     await updateUserPofile(userInfo.id, introduction, birthDay, iconUrl);
+    router.back()
   }
 
   return (
@@ -52,15 +53,15 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
       isOwnUser &&
       (<>
         <label className="input">アイコン
-          <input type="text" placeholder={iconUrl}
+          <input type="text" value={iconUrl || ""}
             onChange={evt => setIconUrl(evt.target.value)}></input>
         </label>
         <label className="input">自己紹介
-          <input type="text" placeholder={introduction}
+          <input type="text" value={introduction || ""}
             onChange={evt => setIntroduction(evt.target.value)}></input>
         </label>
         <label className="input">誕生日
-          <input type="date" placeholder={birthDay}
+          <input type="date" value={birthDay || ""}
             onChange={evt => setBirthDay(evt.target.value)}></input>
         </label>
         <button onClick={() => updateUserProfile()}>更新</button>

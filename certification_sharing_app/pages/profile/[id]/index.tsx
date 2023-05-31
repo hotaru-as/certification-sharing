@@ -61,6 +61,8 @@ const ProfilePage: NextPage<profileType> = ({userInfo, userProfile, targets}) =>
       <p>アイコン</p>
       <p>{userInfo.username}</p>
       <p>メッセージ: {userProfile.introduction}</p>
+      {userProfile.birth_day &&
+      <p>誕生日: {userProfile.birth_day}</p>}
 
       <p>フォロー: 10</p>
       <p>フォロワー: {followerNum}</p>
