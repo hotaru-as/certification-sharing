@@ -95,19 +95,24 @@ const ProfilePage: NextPage<profileType> = (props) => {
 
   return (
     <>
-      <p>アイコン</p>
-      <p>{userInfo.username}</p>
-      <p>メッセージ: {userProfile.introduction}</p>
-      {userProfile.birth_day &&
-      <p>誕生日: {userProfile.birth_day}</p>}
+      <div className="flex flex-row">
+        <p className='basis-1/4'>アイコン</p>
+        <div className='basis-3/4'>
+          <p className='font-bold'>{userInfo.username}</p>
+          <p>{userProfile.introduction}</p>
+          {userProfile.birth_day &&
+          <p>誕生日: {userProfile.birth_day}</p>}
+          {isOwnUser 
+            && <Link href={`/profile/${userInfo.id}/profile-edit`}>
+              <a>プロフィールを編集する</a>
+            </Link>}
+        </div>
+      </div>
 
-      <p>フォロー: {followNum}</p>
-      <p>フォロワー: {followerNum}</p>
-
-      {isOwnUser 
-        && <Link href={`/profile/${userInfo.id}/profile-edit`}>
-          <a>プロフィールを編集する</a>
-        </Link>}
+      <div className='flex flex-row'>
+        <p className='basis-1/4'>フォロー: {followNum}</p>
+        <p className='basis-1/4'>フォロワー: {followerNum}</p>
+      </div>
 
       {isOwnUser 
         || (
@@ -115,29 +120,45 @@ const ProfilePage: NextPage<profileType> = (props) => {
             <button onClick={() => deleteFollowerNum()}>フォローを解除する</button>
             : <button onClick={() => addFollowerNum()}>フォローする</button>)}
 
-      <p>目標</p>
-      {targets.length > 0 &&
-        <TargetItem target={targets[0]} statuses={targetStatuses} />
-      }
-      {isOwnUser 
-        && <Link href={`/profile/${userInfo.id}/targets/add`}>
-          <a className="border-solid border-2 rounded border-blue-400 text-blue-400">追加</a>
-        </Link>}
-      <Link href={`/profile/${userInfo.id}/targets`}>
-        <a>目標一覧を見る</a>
-      </Link>
+      <div className='my-2'>
+        <p className='text-blue-600'>目標</p>
+        {targets.length > 0 &&
+          <TargetItem target={targets[0]} statuses={targetStatuses} />
+        }
+        {isOwnUser 
+          && <Link href={`/profile/${userInfo.id}/targets/add`}>
+            <a className="border rounded border-blue-400 text-blue-400">追加</a>
+          </Link>}
+        <Link href={`/profile/${userInfo.id}/targets`}>
+          <a className='border-b border-blue-400 text-blue-400 hover:border-blue-600 hover:text-blue-600'>目標一覧を見る</a>
+        </Link>
+      </div>
 
-      <p>資格結果</p>
-      {certifications.length > 0 && 
-        <CertificationItem certification={certifications[0]}/>
-      }
-      <button>資格結果一覧を見る</button>
-      {isOwnUser && <p>資格結果を追加する</p>}
+      <div className='my-2'>
+        <p className='text-yellow-500'>資格結果</p>
+        {certifications.length > 0 && 
+          <CertificationItem certification={certifications[0]}/>
+        }
+        {isOwnUser 
+          && <Link href="#">
+            <a className="border rounded border-yellow-400 text-yellow-400">追加</a>
+          </Link>}
+        <Link href="#">
+          <a className='border-b border-yellow-400 text-yellow-400 hover:border-yellow-500 hover:text-yellow-500'>資格結果一覧を見る</a>
+        </Link>
+      </div>
 
-      <p>勉強記録</p>
-      {/* <RecordItem record={staticRecords[0]}/> */}
-      <button>勉強記録一覧を見る</button>
-      {isOwnUser && <p>勉強記録を追加する</p>}
+      <div className='my-2'>
+        <p className='text-green-600'>勉強記録</p>
+        {/* <RecordItem record={staticRecords[0]}/> */}
+        {isOwnUser 
+          && <Link href="#">
+            <a className="border rounded border-green-400 text-green-400">追加</a>
+          </Link>}
+        <Link href="#">
+          <a className='border-b border-green-400 text-green-400 hover:border-green-600 hover:text-green-600'>勉強記録一覧を見る</a>
+        </Link>
+      </div>
     </>
   )
 }
