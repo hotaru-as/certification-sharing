@@ -8,4 +8,6 @@ urlpatterns = [
     path('target-status/', ListTargetStatusView.as_view(), name='target_status'),
     path('targets/', ListUserTargetView.as_view(), name='targets'),
     path('targets/<str:pk>/', UpdateUserTargetView.as_view(), name='target'),
+    path('followers/', ListFollowerView.as_view(), name='followers'),
+    path('followers/<str:pk>/', DeleteFollowerView.as_view(), name='follower'),
 ]

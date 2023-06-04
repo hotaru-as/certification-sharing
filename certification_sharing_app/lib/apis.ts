@@ -243,3 +243,54 @@ export async function createUserTarget(
     return null;
   }
 }
+
+export async function getFollowUsers(follow_id: string) {
+  const param = {
+    "follow_user": follow_id
+  }
+
+  const query = new URLSearchParams(param);
+
+  const followers = await sendRequest(`api/followers/?${query}`, "GET", false)
+  return followers;
+}
+
+export async function getFollowedUsers(followed_id: string) {
+  const param = {
+    "followed_user": followed_id
+  }
+
+  const query = new URLSearchParams(param);
+
+  const followers = await sendRequest(`api/followers/?${query}`, "GET", false);
+  return followers;
+}
+
+export async function getMyFollowUser(follow_id?: number, followed_id?: string) {
+  const param = {
+    "follow_user": follow_id,
+    "followed_user": followed_id
+  }
+
+  const query = new URLSearchParams(param);
+
+  const followers = await sendRequest(`api/followers/?${query}`, "GET", false);
+  return followers;
+}
+
+export async function addFollowUser(follow_id?: number, followed_id?: number) {
+  const body = {
+    body: JSON.stringify({
+      "follow_user": follow_id,
+      "followed_user": followed_id
+    })
+  }
+
+  const followers = await sendRequest(`api/followers/`, "POST", true, body);
+  return followers;
+}
+
+export async function deleteFollowUser(id: number) {
+  const followers = await sendRequest(`api/followers/${id}`, "DELETE", true);
+  return followers;
+}

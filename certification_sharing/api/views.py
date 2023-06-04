@@ -1,6 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
 from .serializers import *
 from .models import *
 
@@ -43,3 +44,27 @@ class ListUserTargetView(generics.ListCreateAPIView):
 class UpdateUserTargetView(generics.UpdateAPIView):
     serializer_class = TargetRecordSerializer
     queryset = TargetRecord.objects.all()
+
+class ListFollowerView(generics.ListCreateAPIView):
+    serializer_class = FollowerSerializer
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            self.permission_classes = (AllowAny,)
+        return super(ListFollowerView, self).get_permissions()
+    def get_queryset(self):
+        if self.request.GET.get('follow_user') is not None and\
+            self.request.GET.get('followed_user') is not None:
+            follow = self.request.GET.get('follow_user')
+            follower = self.request.GET.get('followed_user')
+            return Follower.objects.filter(follow_user=follow, followed_user=follower)
+        elif self.request.GET.get('follow_user') is not None:
+            follow = self.request.GET.get('follow_user')
+            return Follower.objects.filter(follow_user=follow)
+        elif self.request.GET.get('followed_user') is not None:
+            follower = self.request.GET.get('followed_user')
+            return Follower.objects.filter(followed_user=follower)
+        return NotFound
+
+class DeleteFollowerView(generics.DestroyAPIView):
+    serializer_class = FollowerSerializer
+    queryset = Follower.objects.all()
