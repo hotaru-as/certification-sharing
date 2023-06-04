@@ -7,7 +7,7 @@ import { RecordType } from '../../../type/Record.type'
 import { CertificationType } from '../../../type/Certification.type'
 import { useEffect, useState } from 'react'
 import { getAllUserIds, getOwnUser, getUser } from '../../../lib/accounts'
-import { getUserProfile } from '../../../lib/apis'
+import { getTargetStatuses, getUserProfile, getUserTargets } from '../../../lib/apis'
 import { UserInfoType } from '../../../type/UserInfo.type'
 import Link from 'next/link'
 
@@ -15,16 +15,16 @@ type profileType = {
   userInfo: any,
   userProfile: any;
   targets: any;
+  targetStatuses: any;
 }
 
-const ProfilePage: NextPage<profileType> = ({userInfo, userProfile, targets}) => {
+const ProfilePage: NextPage<profileType> = ({userInfo, userProfile, targets, targetStatuses}) => {
   // 実際は引数で渡す
-  const staticTargets: TargetType[] = []
-  const staticRecords: RecordType[] = []
-  const staticCertifications: CertificationType[] = []
+  const records: RecordType[] = []
+  const certifications: CertificationType[] = []
 
-  // const filteredTargets = staticTargets?.sort(
-  //   (a, b) => new Date(b.created_at) - new Date(a.created_at)
+  // const filteredTargets = targets?.sort(
+  //   (a: any, b: any) => new Date(b.createdAt) - new Date(a.createdAt)
   // )
 
   const [followerNum, setFollowerNum] = useState(0);
@@ -68,18 +68,27 @@ const ProfilePage: NextPage<profileType> = ({userInfo, userProfile, targets}) =>
       <p>フォロワー: {followerNum}</p>
 
       {isOwnUser 
-        && <Link href={`/profile/${userInfo.id}/profile-edit`}>プロフィールを編集する</Link>}
+        && <Link href={`/profile/${userInfo.id}/profile-edit`}>
+          <a>プロフィールを編集する</a>
+        </Link>}
 
       {isOwnUser 
         || <button onClick={() => updateFollowerNum()}>フォローする</button>}
 
       <p>目標</p>
-      {/* <TargetItem target={staticTargets[0]}/> */}
-      <button>目標一覧を見る</button>
-      {isOwnUser && <p>目標を追加する</p>}
+      <TargetItem target={targets[0]} statuses={targetStatuses} />
+      <Link href={`/profile/${userInfo.id}/targets`}>
+        <a>目標一覧を見る</a>
+      </Link>
+      {isOwnUser 
+        && <Link href={`/profile/${userInfo.id}/targets/add`}>
+          <a>目標を追加する</a>
+        </Link>}
 
       <p>資格結果</p>
-      {/* <CertificationItem certification={staticCertifications[0]}/> */}
+      {certifications.length > 0 && 
+        <CertificationItem certification={certifications[0]}/>
+      }
       <button>資格結果一覧を見る</button>
       {isOwnUser && <p>資格結果を追加する</p>}
 
@@ -97,7 +106,8 @@ export async function getStaticProps({ params }: any) {
   const userInfo = await getUser(params.id);
   const userProfile = await getUserProfile(params.id);
 
-  const targets: TargetType[] = [] //ユーザーの目標一覧
+  const targets: TargetType[] = await getUserTargets(params.id);
+  const targetStatuses = await getTargetStatuses();
   const staticRecords: RecordType[] = [] //ユーザーの勉強記録一覧
   const staticCertifications: CertificationType[] = [] //ユーザーの資格受験結果一覧
 
@@ -106,6 +116,7 @@ export async function getStaticProps({ params }: any) {
       userInfo,
       userProfile,
       targets,
+      targetStatuses,
     },
     revalidate: 3,
   }

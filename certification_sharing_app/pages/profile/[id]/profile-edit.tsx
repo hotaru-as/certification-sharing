@@ -52,15 +52,15 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
     {
       isOwnUser &&
       (<>
-        <label className="input">アイコン
+        <label>アイコン
           <input type="text" value={iconUrl || ""}
             onChange={evt => setIconUrl(evt.target.value)}></input>
         </label>
-        <label className="input">自己紹介
+        <label>自己紹介
           <input type="text" value={introduction || ""}
             onChange={evt => setIntroduction(evt.target.value)}></input>
         </label>
-        <label className="input">誕生日
+        <label>誕生日
           <input type="date" value={birthDay || ""}
             onChange={evt => setBirthDay(evt.target.value)}></input>
         </label>

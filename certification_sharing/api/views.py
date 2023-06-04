@@ -1,17 +1,13 @@
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from .serializers import UserProfileSerializer
-from .models import UserProfile
+from .serializers import *
+from .models import *
 
 class UpdateUserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer
-    # queryset = UserProfile.objects.all()
+    queryset = UserProfile.objects.all()
     permission_classes = (AllowAny,)
-
-    def get_queryset(self):
-        print(self.request.user, self.request.user.id)
-        return UserProfile.objects.all()
 
     def get_permissions(self):
         if self.request.method == 'GET':
@@ -28,3 +24,22 @@ class CreateUserProfileView(generics.CreateAPIView):
             return Response(status=http_status)
 
         return super().create(request, *args, **kwargs)
+
+class ListTargetStatusView(generics.ListAPIView):
+    serializer_class = TargetStatusSerializer
+    permission_classes = (AllowAny,)
+    queryset = TargetStatus.objects.all()
+
+class ListUserTargetView(generics.ListCreateAPIView):
+    serializer_class = TargetRecordSerializer
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            self.permission_classes = (AllowAny,)
+        return super(ListUserTargetView, self).get_permissions()
+    def get_queryset(self):
+        print(self.request.GET.get)
+        return TargetRecord.objects.filter(user=self.request.GET.get('user'))
+
+class UpdateUserTargetView(generics.UpdateAPIView):
+    serializer_class = TargetRecordSerializer
+    queryset = TargetRecord.objects.all()

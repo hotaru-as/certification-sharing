@@ -36,7 +36,7 @@ class TargetRecordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TargetRecord
-        fields = ('id', 'user', 'content', 'study_time', 'comment', 'created_at', 'modified_at')
+        fields = ('id', 'user', 'target', 'target_deadline', 'status', 'comment', 'created_at', 'modified_at')
 
 class StudyRecordSerializer(serializers.ModelSerializer):
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
