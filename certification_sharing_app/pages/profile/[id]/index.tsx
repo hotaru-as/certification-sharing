@@ -115,6 +115,11 @@ const ProfilePage: NextPage<profileType> = (props) => {
       </div>
 
       {isOwnUser 
+        && <Link href={`/`}>
+          <a>タイムラインを見る</a>
+        </Link>} 
+
+      {isOwnUser 
         || (
           isFollow ?
             <button onClick={() => deleteFollowerNum()}>フォローを解除する</button>
