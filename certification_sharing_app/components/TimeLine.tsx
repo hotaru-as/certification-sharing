@@ -2,9 +2,9 @@ import Link from "next/link";
 import { FC } from "react";
 import { PostType } from "../type/Post.type";
 import Post from "./Post";
-import { UserInfoType } from "../type/UserInfo.type";
+import { UserType } from "../type/User.type";
 
-const TimeLine: FC<{userInfo: UserInfoType, staticPosts: any}> = ({userInfo, staticPosts}) => {
+const TimeLine: FC<{userInfo: UserType, staticPosts: any}> = ({userInfo, staticPosts}) => {
   const posts: PostType[] = [];
   // const filteredPosts = staticPosts?.sort(
   //   (a, b) => new Date(b.created_at) - new Date(a.created_at)

@@ -8,7 +8,7 @@ import { CertificationType } from '../../../type/Certification.type'
 import { useEffect, useState } from 'react'
 import { getAllUserIds, getOwnUser, getUser } from '../../../lib/accounts'
 import { addFollowUser, deleteFollowUser, getFollowedUsers, getFollowUsers, getMyFollowUser, getTargetStatuses, getUserProfile, getUserTargets } from '../../../lib/apis'
-import { UserInfoType } from '../../../type/UserInfo.type'
+import { UserType } from '../../../type/User.type'
 import Link from 'next/link'
 
 type profileType = {
@@ -50,7 +50,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
   }, [])
 
   const verifyIsOwnUser = async () => {
-    const ownUser: UserInfoType = await getOwnUser();
+    const ownUser: UserType = await getOwnUser();
 
     if(ownUser == null){
       setIsOwnUser(false);
@@ -66,7 +66,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
   }
 
   const verifyIsFollow = async () => {
-    const ownUser: UserInfoType = await getOwnUser();
+    const ownUser: UserType = await getOwnUser();
 
     if(ownUser != null) {
       const follower = await getMyFollowUser(ownUser.user_id, userInfo.id);
@@ -80,7 +80,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
     setFollowerNum(followerNum + 1);
     setIsFollow(true);
     
-    const ownUser: UserInfoType = await getOwnUser();
+    const ownUser: UserType = await getOwnUser();
     await addFollowUser(ownUser.user_id, userInfo.id)
   }
 
@@ -88,7 +88,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
     setFollowerNum(followerNum - 1);
     setIsFollow(false);
 
-    const ownUser: UserInfoType = await getOwnUser();
+    const ownUser: UserType = await getOwnUser();
     const follower = await getMyFollowUser(ownUser.user_id, userInfo.id);
     await deleteFollowUser(follower[0].id);
   }

@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { getAllUserIds, getOwnUser, getUser } from '../../../lib/accounts'
 import { getUserProfile, updateUserPofile } from '../../../lib/apis'
-import { UserInfoType } from '../../../type/UserInfo.type'
+import { UserType } from '../../../type/User.type'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -24,7 +24,7 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
   }, [])
 
   const verifyIsOwnUser = async () => {
-    const ownUser: UserInfoType= await getOwnUser();
+    const ownUser: UserType= await getOwnUser();
 
     if(ownUser == null){
       setIsOwnUser(false);

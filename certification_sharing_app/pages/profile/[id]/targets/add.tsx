@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { getAllUserIds, getOwnUser, getUser } from "../../../../lib/accounts";
 import { createUserTarget, getTargetStatuses } from "../../../../lib/apis";
-import { UserInfoType } from "../../../../type/UserInfo.type";
+import { UserType } from "../../../../type/User.type";
 
 type TargetAddType = {
   userInfo: any,
@@ -24,7 +24,7 @@ const TargetAddPage: NextPage<TargetAddType> = ({ userInfo, targetStatuses }) =>
   }, [])
 
   const verifyIsOwnUser = async () => {
-    const ownUser: UserInfoType = await getOwnUser();
+    const ownUser: UserType = await getOwnUser();
     console.log(targetStatuses)
 
     if(ownUser == null){

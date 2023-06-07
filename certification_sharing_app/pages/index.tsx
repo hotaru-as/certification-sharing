@@ -4,7 +4,7 @@ import LoginPrompt from '../components/LoginPrompt'
 import Layout from '../components/Layout'
 import { getOwnUser } from '../lib/accounts'
 import { useEffect, useState } from 'react'
-import { UserInfoType } from '../type/UserInfo.type'
+import { UserType } from '../type/User.type'
 
 const Home: NextPage<{staticPosts: any}> = ({staticPosts}) => {
   const [userInfo, setUserInfo] = useState({user_id: 0, user_name: ""})
@@ -14,7 +14,7 @@ const Home: NextPage<{staticPosts: any}> = ({staticPosts}) => {
   }, [])
 
   const getUserInfo = async () => {
-    const user: UserInfoType = await getOwnUser();
+    const user: UserType = await getOwnUser();
     console.log(user);
     setUserInfo(user);
   }

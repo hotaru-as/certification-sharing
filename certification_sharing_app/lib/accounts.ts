@@ -1,5 +1,5 @@
 import Cookie from "universal-cookie";
-import { UserInfoType } from "../type/UserInfo.type";
+import { UserType } from "../type/User.type";
 import { createUserProfile } from "./apis";
 
 const cookie = new Cookie();
@@ -79,7 +79,7 @@ export async function getOwnUser()
         return res.json();
       }
     });
-    const userInfo: UserInfoType = {
+    const userInfo: UserType = {
       user_id: data.id,
       user_name: data.username
     };
@@ -87,7 +87,7 @@ export async function getOwnUser()
   } catch(err) {
     alert(err);
   }
-  const userInfo: UserInfoType = {
+  const userInfo: UserType = {
     user_id: undefined,
     user_name: undefined
   };

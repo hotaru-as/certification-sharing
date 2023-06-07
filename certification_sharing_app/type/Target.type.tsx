@@ -1,10 +1,12 @@
 type TargetType = {
   id: number
-  content: string;
-  date: string;
+  userId: number;
+  target: string;
+  deadline: string;
   status: string;
   comment: string;
-  createdAt: string
+  createdAt: string;
+  modifiedAt: string;
 }
 
 export type {TargetType};
