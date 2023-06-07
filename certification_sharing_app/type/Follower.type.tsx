@@ -4,4 +4,4 @@ type Follower = {
     createdAt: string;
 }
 
-export type Follower
+export type {Follower}
