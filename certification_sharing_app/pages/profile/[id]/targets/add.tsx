@@ -2,12 +2,13 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { getAllUserIds, getOwnUser, getUser } from "../../../../lib/accounts";
-import { createUserTarget, getTargetStatuses } from "../../../../lib/apis";
+import { createUserTarget, getTargetStatuses } from "../../../../lib/target";
+import { TargetStatus } from "../../../../type/TargetStatus.type";
 import { UserType } from "../../../../type/User.type";
 
 type TargetAddType = {
   userInfo: any,
-  targetStatuses: any
+  targetStatuses: TargetStatus[]
 }
 
 const TargetAddPage: NextPage<TargetAddType> = ({ userInfo, targetStatuses }) => {

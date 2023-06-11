@@ -2,15 +2,17 @@ import type { NextPage } from 'next'
 import { TargetType } from '../../../../type/Target.type';
 import TargetItem from '../../../../components/TargetItem';
 import { getAllUserIds, getUser } from '../../../../lib/accounts';
-import { getTargetStatuses, getUserProfile, getUserTargets } from '../../../../lib/apis';
+import { getUserProfile } from '../../../../lib/apis';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { getTargetStatuses, getUserTargets } from '../../../../lib/target';
+import { TargetStatus } from '../../../../type/TargetStatus.type';
 
 type targetsType = {
   userInfo: any,
   userProfile: any;
-  targets: any;
-  targetStatuses: any;
+  targets: TargetType[];
+  targetStatuses: TargetStatus[];
 }
 
 const TargetPage: NextPage<targetsType> = ({userInfo, userProfile, targets, targetStatuses}) => {

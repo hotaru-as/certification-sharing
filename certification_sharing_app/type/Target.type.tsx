@@ -1,8 +1,8 @@
 type TargetType = {
   id: number
-  userId: number;
+  user: number;
   target: string;
-  deadline: string;
+  targetDeadline: string;
   status: string;
   comment: string;
   createdAt: string;

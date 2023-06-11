@@ -1,6 +1,7 @@
 type Follower = {
-    followUserId: number;
-    followedUserId: number;
+    id: number;
+    followUser: number;
+    followedUser: number;
     createdAt: string;
 }
 

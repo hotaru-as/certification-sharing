@@ -7,17 +7,20 @@ import { RecordType } from '../../../type/Record.type'
 import { CertificationType } from '../../../type/Certification.type'
 import { useEffect, useState } from 'react'
 import { getAllUserIds, getOwnUser, getUser } from '../../../lib/accounts'
-import { addFollowUser, deleteFollowUser, getFollowedUsers, getFollowUsers, getMyFollowUser, getTargetStatuses, getUserProfile, getUserTargets } from '../../../lib/apis'
+import { getUserProfile } from '../../../lib/apis'
 import { UserType } from '../../../type/User.type'
 import Link from 'next/link'
+import { addFollowUser, deleteFollowUser, getFollowedUsers, getFollowUsers, getOwnFollowUsers } from '../../../lib/follower'
+import { Follower } from '../../../type/Follower.type'
+import { getTargetStatuses, getUserTargets } from '../../../lib/target'
 
 type profileType = {
   userInfo: any,
   userProfile: any;
   targets: any;
   targetStatuses: any;
-  follows: any;
-  followers: any;
+  follows: Follower[];
+  followers: Follower[];
 }
 
 const ProfilePage: NextPage<profileType> = (props) => {
@@ -26,7 +29,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
   const targets = props.targets;
   const targetStatuses = props.targetStatuses;
   const follows = props.follows;
-  const followers = props.followers;
+  const followers: Follower[] = props.followers;
 
   // 実際は引数で渡す
   const records: RecordType[] = []
@@ -67,9 +70,11 @@ const ProfilePage: NextPage<profileType> = (props) => {
 
   const verifyIsFollow = async () => {
     const ownUser: UserType = await getOwnUser();
+    console.log(followers)
+    console.log(followers[0].followUser)
 
     if(ownUser != null) {
-      const follower = await getMyFollowUser(ownUser.user_id, userInfo.id);
+      const follower = await getOwnFollowUsers(ownUser.user_id, userInfo.id);
       if(follower.length != 0) {
         setIsFollow(true);
       }
@@ -89,7 +94,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
     setIsFollow(false);
 
     const ownUser: UserType = await getOwnUser();
-    const follower = await getMyFollowUser(ownUser.user_id, userInfo.id);
+    const follower = await getOwnFollowUsers(ownUser.user_id, userInfo.id);
     await deleteFollowUser(follower[0].id);
   }
 
