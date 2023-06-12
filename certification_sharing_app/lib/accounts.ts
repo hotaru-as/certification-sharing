@@ -1,6 +1,6 @@
 import Cookie from "universal-cookie";
 import { UserType } from "../type/User.type";
-import { createUserProfile } from "./apis";
+import { sendRequest } from "./common";
 
 const cookie = new Cookie();
 
@@ -59,53 +59,14 @@ export async function register(username: string, password: string): Promise<bool
   }
 }
 
-export async function getOwnUser()
+export async function getAuthUser(): Promise<UserType>
 {
-  try{
-    const data = await fetch(
-      `${process.env.NEXT_PUBLIC_RESTAPI_URL}accounts/auth/users/me/`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `JWT ${cookie.get("access_token")}`
-        },
-      }
-    )
-    .then((res) => {
-      if (res.status === 400) {
-        throw "authentication failed";
-      } else if (res.ok) {
-        return res.json();
-      }
-    });
-    const userInfo: UserType = {
-      user_id: data.id,
-      user_name: data.username
-    };
-    return userInfo;
-  } catch(err) {
-    alert(err);
-  }
-  const userInfo: UserType = {
-    user_id: undefined,
-    user_name: undefined
-  };
-  return userInfo;
+  const authUser = await sendRequest<UserType>(`accounts/auth/users/me/`, "GET", true)
+  return authUser;
 }
 
 export async function getAllUserIds() {
-  const res = await fetch(
-    new URL(`${process.env.NEXT_PUBLIC_RESTAPI_URL}accounts/users`),
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  
-  const users: any[] = await res.json()
+  const users = await sendRequest<UserType[]>(`accounts/users`, "GET", false)
 
   return users.map((user: any) => {
     return {
@@ -116,28 +77,8 @@ export async function getAllUserIds() {
   })
 }
 
-export async function getUser(id: string)
+export async function getUser(id: string): Promise<UserType>
 {
-  try{
-    const userInfo = await fetch(
-      `${process.env.NEXT_PUBLIC_RESTAPI_URL}accounts/users/${id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },  
-      }
-    )
-    .then((res) => {
-      if (res.status === 400) {
-        throw "authentication failed";
-      } else if (res.ok) {
-        return res.json()
-      }
-    });
-    return userInfo;
-  } catch(err) {
-    alert(err);
-    return null;
-  }  
+  const userInfo = await sendRequest<UserType>(`accounts/users/${id}`, "GET", false)
+  return userInfo;
 }

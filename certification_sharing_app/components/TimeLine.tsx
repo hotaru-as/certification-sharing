@@ -16,10 +16,10 @@ const TimeLine: FC<{userInfo: UserType, staticPosts: any}> = ({userInfo, staticP
   return (
     <>
       <div>
-        <Link href={`/profile/${userInfo.user_id}`}>
+        <Link href={`/profile/${userInfo.id}`}>
           プロフィール
         </Link>
-        <h2>{userInfo.user_name}さんのタイムライン</h2>
+        <h2>{userInfo.username}さんのタイムライン</h2>
         {posts.map((post: PostType) => 
           <Post post={post} />
         )}

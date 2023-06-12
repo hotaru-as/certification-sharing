@@ -1,6 +1,6 @@
 type UserType = {
-  user_id: number;
-  user_name: string;
+  id: number;
+  username: string;
 }
-  
+
 export type {UserType};

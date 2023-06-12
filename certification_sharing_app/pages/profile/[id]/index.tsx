@@ -6,17 +6,18 @@ import { TargetType } from '../../../type/Target.type'
 import { RecordType } from '../../../type/Record.type'
 import { CertificationType } from '../../../type/Certification.type'
 import { useEffect, useState } from 'react'
-import { getAllUserIds, getOwnUser, getUser } from '../../../lib/accounts'
-import { getUserProfile } from '../../../lib/apis'
+import { getAllUserIds, getAuthUser, getUser } from '../../../lib/accounts'
 import { UserType } from '../../../type/User.type'
 import Link from 'next/link'
 import { addFollowUser, deleteFollowUser, getFollowedUsers, getFollowUsers, getOwnFollowUsers } from '../../../lib/follower'
 import { Follower } from '../../../type/Follower.type'
 import { getTargetStatuses, getUserTargets } from '../../../lib/target'
+import { getUserProfile } from '../../../lib/userProfile'
+import { UserProfile } from '../../../type/UserProfile.type'
 
 type profileType = {
-  userInfo: any,
-  userProfile: any;
+  userInfo: any;
+  userProfile: UserProfile;
   targets: any;
   targetStatuses: any;
   follows: Follower[];
@@ -53,14 +54,14 @@ const ProfilePage: NextPage<profileType> = (props) => {
   }, [])
 
   const verifyIsOwnUser = async () => {
-    const ownUser: UserType = await getOwnUser();
+    const ownUser: UserType = await getAuthUser();
 
     if(ownUser == null){
       setIsOwnUser(false);
       return;
     }
 
-    if(ownUser.user_id == userInfo.id)
+    if(ownUser.id == userInfo.id)
     {
       setIsOwnUser(true);
       return;
@@ -69,12 +70,10 @@ const ProfilePage: NextPage<profileType> = (props) => {
   }
 
   const verifyIsFollow = async () => {
-    const ownUser: UserType = await getOwnUser();
-    console.log(followers)
-    console.log(followers[0].followUser)
+    const ownUser: UserType = await getAuthUser();
 
     if(ownUser != null) {
-      const follower = await getOwnFollowUsers(ownUser.user_id, userInfo.id);
+      const follower = await getOwnFollowUsers(ownUser.id, userInfo.id);
       if(follower.length != 0) {
         setIsFollow(true);
       }
@@ -85,16 +84,16 @@ const ProfilePage: NextPage<profileType> = (props) => {
     setFollowerNum(followerNum + 1);
     setIsFollow(true);
     
-    const ownUser: UserType = await getOwnUser();
-    await addFollowUser(ownUser.user_id, userInfo.id)
+    const ownUser: UserType = await getAuthUser();
+    await addFollowUser(ownUser.id, userInfo.id)
   }
 
   const deleteFollowerNum = async () => {
     setFollowerNum(followerNum - 1);
     setIsFollow(false);
 
-    const ownUser: UserType = await getOwnUser();
-    const follower = await getOwnFollowUsers(ownUser.user_id, userInfo.id);
+    const ownUser: UserType = await getAuthUser();
+    const follower = await getOwnFollowUsers(ownUser.id, userInfo.id);
     await deleteFollowUser(follower[0].id);
   }
 
@@ -105,8 +104,8 @@ const ProfilePage: NextPage<profileType> = (props) => {
         <div className='basis-3/4'>
           <p className='font-bold'>{userInfo.username}</p>
           <p>{userProfile.introduction}</p>
-          {userProfile.birth_day &&
-          <p>誕生日: {userProfile.birth_day}</p>}
+          {userProfile.birthDay &&
+          <p>誕生日: {userProfile.birthDay}</p>}
           {isOwnUser 
             && <Link href={`/profile/${userInfo.id}/profile-edit`}>
               <a>プロフィールを編集する</a>

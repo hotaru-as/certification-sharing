@@ -1,14 +1,15 @@
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
-import { getAllUserIds, getOwnUser, getUser } from '../../../lib/accounts'
-import { getUserProfile, updateUserPofile } from '../../../lib/apis'
+import { getAllUserIds, getAuthUser, getUser } from '../../../lib/accounts'
 import { UserType } from '../../../type/User.type'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { getUserProfile, updateUserProfile } from '../../../lib/userProfile'
+import { UserProfile } from '../../../type/UserProfile.type'
 
 type profileType = {
   userInfo: any,
-  userProfile: any;
+  userProfile: UserProfile;
 }
 
 const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
@@ -16,22 +17,22 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
 
   const [isOwnUser, setIsOwnUser] = useState(false);
   const [introduction, setIntroduction] = useState(userProfile.introduction);
-  const [birthDay, setBirthDay] = useState(userProfile.birth_day)
-  const [iconUrl, setIconUrl] = useState(userProfile.icon_url)
+  const [birthDay, setBirthDay] = useState(userProfile.birthDay)
+  const [iconUrl, setIconUrl] = useState(userProfile.iconUrl)
 
   useEffect(() => {
     verifyIsOwnUser();
   }, [])
 
   const verifyIsOwnUser = async () => {
-    const ownUser: UserType= await getOwnUser();
+    const ownUser: UserType= await getAuthUser();
 
     if(ownUser == null){
       setIsOwnUser(false);
       return;
     }
 
-    if(ownUser.user_id == userInfo.id)
+    if(ownUser.id == userInfo.id)
     {
       setIsOwnUser(true);
       return;
@@ -39,11 +40,8 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
     setIsOwnUser(false);    
   }
 
-  const updateUserProfile = async () => {
-    console.log(birthDay)
-    console.log(typeof(birthDay))
-    console.log(iconUrl)
-    await updateUserPofile(userInfo.id, introduction, birthDay, iconUrl);
+  const updateProfile = async () => {
+    await updateUserProfile(userInfo.id, introduction, birthDay, iconUrl);
     router.back()
   }
 
@@ -64,7 +62,7 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
           <input type="date" value={birthDay || ""}
             onChange={evt => setBirthDay(evt.target.value)}></input>
         </label>
-        <button onClick={() => updateUserProfile()}>更新</button>
+        <button onClick={() => updateProfile()}>更新</button>
         <button onClick={() => router.back()}>キャンセル</button>
       </>)
     }

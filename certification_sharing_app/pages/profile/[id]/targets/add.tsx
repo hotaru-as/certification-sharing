@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getAllUserIds, getOwnUser, getUser } from "../../../../lib/accounts";
+import { getAllUserIds, getAuthUser, getUser } from "../../../../lib/accounts";
 import { createUserTarget, getTargetStatuses } from "../../../../lib/target";
 import { TargetStatus } from "../../../../type/TargetStatus.type";
 import { UserType } from "../../../../type/User.type";
@@ -25,7 +25,7 @@ const TargetAddPage: NextPage<TargetAddType> = ({ userInfo, targetStatuses }) =>
   }, [])
 
   const verifyIsOwnUser = async () => {
-    const ownUser: UserType = await getOwnUser();
+    const ownUser: UserType = await getAuthUser();
     console.log(targetStatuses)
 
     if(ownUser == null){
@@ -33,7 +33,7 @@ const TargetAddPage: NextPage<TargetAddType> = ({ userInfo, targetStatuses }) =>
       return;
     }
 
-    if(ownUser.user_id == userInfo.id)
+    if(ownUser.id == userInfo.id)
     {
       setIsOwnUser(true);
       return;

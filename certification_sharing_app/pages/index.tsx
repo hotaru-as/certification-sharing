@@ -2,19 +2,19 @@ import type { NextPage } from 'next'
 import TimeLine from '../components/TimeLine'
 import LoginPrompt from '../components/LoginPrompt'
 import Layout from '../components/Layout'
-import { getOwnUser } from '../lib/accounts'
+import { getAuthUser } from '../lib/accounts'
 import { useEffect, useState } from 'react'
 import { UserType } from '../type/User.type'
 
 const Home: NextPage<{staticPosts: any}> = ({staticPosts}) => {
-  const [userInfo, setUserInfo] = useState({user_id: 0, user_name: ""})
+  const [userInfo, setUserInfo] = useState({id: 0, username: ""})
 
   useEffect(() => {
     getUserInfo();
   }, [])
 
   const getUserInfo = async () => {
-    const user: UserType = await getOwnUser();
+    const user: UserType = await getAuthUser();
     console.log(user);
     setUserInfo(user);
   }
@@ -39,7 +39,7 @@ export default Home
 
 export async function getStaticProps() {
   const staticPosts = {}; //タイムラインの情報を取ってくる
-  // const userInfo = getOwnUser();
+  // const userInfo = getAuthUser();
   // console.log(userInfo);
 
   return {

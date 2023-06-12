@@ -2,7 +2,6 @@ import type { NextPage } from 'next'
 import { TargetType } from '../../../../type/Target.type';
 import TargetItem from '../../../../components/TargetItem';
 import { getAllUserIds, getUser } from '../../../../lib/accounts';
-import { getUserProfile } from '../../../../lib/apis';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { getTargetStatuses, getUserTargets } from '../../../../lib/target';
@@ -10,12 +9,11 @@ import { TargetStatus } from '../../../../type/TargetStatus.type';
 
 type targetsType = {
   userInfo: any,
-  userProfile: any;
   targets: TargetType[];
   targetStatuses: TargetStatus[];
 }
 
-const TargetPage: NextPage<targetsType> = ({userInfo, userProfile, targets, targetStatuses}) => {
+const TargetPage: NextPage<targetsType> = ({userInfo, targets, targetStatuses}) => {
   const router = useRouter();
 
   return (
@@ -37,7 +35,6 @@ export default TargetPage;
 
 export async function getStaticProps({ params }: any) {
   const userInfo = await getUser(params.id);
-  const userProfile = await getUserProfile(params.id);
 
   const targets: TargetType[] = await getUserTargets(params.id);
   const targetStatuses = await getTargetStatuses();
@@ -45,7 +42,6 @@ export async function getStaticProps({ params }: any) {
   return {
     props: { 
       userInfo,
-      userProfile,
       targets,
       targetStatuses,
     },
