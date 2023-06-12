@@ -17,7 +17,7 @@ export default function Register() {
     {
       const isLogin = await login(username, password);
       const userInfo: UserType = await getAuthUser();
-      const create = await createUserProfile(userInfo.id);
+      await createUserProfile(userInfo.id);
       if (isLogin)
       {
         router.push('/')

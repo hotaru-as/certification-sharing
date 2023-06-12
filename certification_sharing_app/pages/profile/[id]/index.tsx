@@ -43,37 +43,33 @@ const ProfilePage: NextPage<profileType> = (props) => {
   const [followNum, setFollowNum] = useState(follows.length);
   const [followerNum, setFollowerNum] = useState(followers.length);
   const [isFollow, setIsFollow] = useState(false);
-  const [isOwnUser, setIsOwnUser] = useState(false);
+  const [isAuthUser, setIsAuthUser] = useState(false);
 
   useEffect(() => {
-    verifyIsOwnUser();
+    verifyIsAuthUser();
   }, [])
 
   useEffect(() => {
     verifyIsFollow();
   }, [])
 
-  const verifyIsOwnUser = async () => {
-    const ownUser: UserType = await getAuthUser();
+  const verifyIsAuthUser = async () => {
+    const authUser: UserType = await getAuthUser();
 
-    if(ownUser == null){
-      setIsOwnUser(false);
-      return;
-    }
-
-    if(ownUser.id == userInfo.id)
+   if(authUser != null && authUser.id == userInfo.id)
     {
-      setIsOwnUser(true);
+      setIsAuthUser(true);
       return;
     }
-    setIsOwnUser(false);
+
+    setIsAuthUser(false);
   }
 
   const verifyIsFollow = async () => {
-    const ownUser: UserType = await getAuthUser();
+    const authUser: UserType = await getAuthUser();
 
-    if(ownUser != null) {
-      const follower = await getOwnFollowUsers(ownUser.id, userInfo.id);
+    if(authUser != null) {
+      const follower = await getOwnFollowUsers(authUser.id, userInfo.id);
       if(follower.length != 0) {
         setIsFollow(true);
       }
@@ -84,16 +80,16 @@ const ProfilePage: NextPage<profileType> = (props) => {
     setFollowerNum(followerNum + 1);
     setIsFollow(true);
     
-    const ownUser: UserType = await getAuthUser();
-    await addFollowUser(ownUser.id, userInfo.id)
+    const authUser: UserType = await getAuthUser();
+    await addFollowUser(authUser.id, userInfo.id)
   }
 
   const deleteFollowerNum = async () => {
     setFollowerNum(followerNum - 1);
     setIsFollow(false);
 
-    const ownUser: UserType = await getAuthUser();
-    const follower = await getOwnFollowUsers(ownUser.id, userInfo.id);
+    const authUser: UserType = await getAuthUser();
+    const follower = await getOwnFollowUsers(authUser.id, userInfo.id);
     await deleteFollowUser(follower[0].id);
   }
 
@@ -106,7 +102,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
           <p>{userProfile.introduction}</p>
           {userProfile.birthDay &&
           <p>誕生日: {userProfile.birthDay}</p>}
-          {isOwnUser 
+          {isAuthUser 
             && <Link href={`/profile/${userInfo.id}/profile-edit`}>
               <a>プロフィールを編集する</a>
             </Link>}
@@ -118,12 +114,12 @@ const ProfilePage: NextPage<profileType> = (props) => {
         <p className='basis-1/4'>フォロワー: {followerNum}</p>
       </div>
 
-      {isOwnUser 
+      {isAuthUser 
         && <Link href={`/`}>
           <a>タイムラインを見る</a>
         </Link>} 
 
-      {isOwnUser 
+      {isAuthUser 
         || (
           isFollow ?
             <button onClick={() => deleteFollowerNum()}>フォローを解除する</button>
@@ -134,7 +130,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
         {targets.length > 0 &&
           <TargetItem target={targets[0]} statuses={targetStatuses} />
         }
-        {isOwnUser 
+        {isAuthUser 
           && <Link href={`/profile/${userInfo.id}/targets/add`}>
             <a className="border rounded border-blue-400 text-blue-400">追加</a>
           </Link>}
@@ -148,7 +144,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
         {certifications.length > 0 && 
           <CertificationItem certification={certifications[0]}/>
         }
-        {isOwnUser 
+        {isAuthUser 
           && <Link href="#">
             <a className="border rounded border-yellow-400 text-yellow-400">追加</a>
           </Link>}
@@ -160,7 +156,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
       <div className='my-2'>
         <p className='text-green-600'>勉強記録</p>
         {/* <RecordItem record={staticRecords[0]}/> */}
-        {isOwnUser 
+        {isAuthUser 
           && <Link href="#">
             <a className="border rounded border-green-400 text-green-400">追加</a>
           </Link>}

@@ -15,7 +15,7 @@ const Home: NextPage<{staticPosts: any}> = ({staticPosts}) => {
 
   const getUserInfo = async () => {
     const user: UserType = await getAuthUser();
-    console.log(user);
+    console.log(user); //emailが入っている
     setUserInfo(user);
   }
 
