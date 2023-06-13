@@ -61,7 +61,7 @@ const TargetAddPage: NextPage<TargetAddType> = ({ userInfo, targetStatuses }) =>
               onChange={(evt) => setDeadline(evt.target.value)} />
             </label>
             <label>ステータス
-              <select onChange={(evt) => setStatus(evt.target.value)}
+              <select onChange={(evt) => setStatus(Number(evt.target.value))}
                 defaultValue={targetStatuses[0].id}>
                 {targetStatuses.map((status: any) => 
                   <option key={status.id} value={status.id}>{status.name}</option>
