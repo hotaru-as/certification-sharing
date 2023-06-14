@@ -6,9 +6,10 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { getTargetStatuses, getUserTargets } from '../../../../lib/target';
 import { TargetStatus } from '../../../../type/TargetStatus.type';
+import { UserType } from '../../../../type/User.type';
 
 type targetsType = {
-  userInfo: any,
+  userInfo: UserType,
   targets: TargetType[];
   targetStatuses: TargetStatus[];
 }

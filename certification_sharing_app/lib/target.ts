@@ -20,72 +20,22 @@ export async function getUserTargets(id: number): Promise<TargetType[]>
 
   const userTargets = await sendRequest<TargetType[]>(`api/targets/?${query}`, "GET", false);
   return userTargets;
-
-//   try{
-//     const targets = await fetch(
-//       `${process.env.NEXT_PUBLIC_RESTAPI_URL}api/targets/?${query}`,
-//       {
-//         method: "GET",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     )
-//     .then((res) => {
-//       if (res.status !== 200) {
-//         throw "authentication failed";
-//       } else if (res.ok) {
-//         return res.json();
-//       }
-//     });
-//     const userTargets: TargetType[] = targets.map((target: any) => {
-//       const temp: TargetType = {
-//         id: target.id,
-//         content: target.target,
-//         date: target.target_deadline,
-//         status: target.status,
-//         comment: target.comment,
-//         createdAt: target.created_at
-//       }
-//       return temp;
-//     });
-//     console.log(userTargets);
-//     return userTargets;
-//   } catch(err) {
-//     return [];
-//   }
 }
 
 export async function createUserTarget(
   userId: number, target: string, targetDeadline: string, statusId: number, comment: string)
+  : Promise<void>
 {
-  try{
-    const userTarget = await fetch(
-      `${process.env.NEXT_PUBLIC_RESTAPI_URL}api/targets/`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `JWT ${cookie.get("access_token")}`
-        },
-        body: JSON.stringify({
-          "user": userId,
-          "target": target,
-          "target_deadline": targetDeadline,
-          "status": statusId,
-          "comment": comment
-        })
-      }
-    )
-    .then((res) => {
-      if (res.status !== 200) {
-        throw "authentication failed";
-      } else if (res.ok) {
-        return res.json()
-      }
-    });
-    return userTarget;
-  } catch(err) {
-    return null;
+  const body: RequestInit = {
+    body: JSON.stringify({
+      "user": userId,
+      "target": target,
+      "targetDeadline": targetDeadline,
+      "status": statusId,
+      "comment": comment
+    })
   }
+
+  await sendRequest<TargetType[]>(`api/targets/`, "POST", true, body);
+  return;
 }

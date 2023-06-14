@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
-import RecordItem from '../../../components/RecordItem'
-import { RecordType } from '../../../type/Record.type'
+import RecordItem from '../../../../components/RecordItem'
+import { RecordType } from '../../../../type/Record.type'
 
 const RecoredPage: NextPage = () => {
   const records: RecordType[] = [{content: "", time: ""}];
