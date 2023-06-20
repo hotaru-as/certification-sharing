@@ -1,9 +1,7 @@
 import { URLSearchParams } from "next/dist/compiled/@edge-runtime/primitives/url";
 import { TargetType } from "../type/Target.type";
-import Cookie from "universal-cookie";
 import { sendRequest } from "./common";
 import { TargetStatus } from "../type/TargetStatus.type";
-const cookie = new Cookie();
 
 export async function getTargetStatuses(): Promise<TargetStatus[]>
 {

@@ -1,7 +1,7 @@
-type CertificationCategoryType = {
+type CertificationCategory = {
   id: number;
   name: string;
   detail: string;
 }
 
-export type {CertificationCategoryType}
+export type {CertificationCategory}

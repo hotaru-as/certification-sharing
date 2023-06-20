@@ -6,3 +6,5 @@ type StudyType = {
     comment: string;
     createdAt: string;
 }
+
+export type {StudyType};

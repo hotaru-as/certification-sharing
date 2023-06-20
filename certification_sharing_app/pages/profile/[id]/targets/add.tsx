@@ -7,7 +7,7 @@ import { TargetStatus } from "../../../../type/TargetStatus.type";
 import { UserType } from "../../../../type/User.type";
 
 type TargetAddType = {
-  userInfo: any,
+  userInfo: UserType,
   targetStatuses: TargetStatus[]
 }
 
@@ -26,7 +26,6 @@ const TargetAddPage: NextPage<TargetAddType> = ({ userInfo, targetStatuses }) =>
 
   const verifyIsOwnUser = async () => {
     const ownUser: UserType = await getAuthUser();
-    console.log(targetStatuses)
 
     if(ownUser == null){
       setIsOwnUser(false);

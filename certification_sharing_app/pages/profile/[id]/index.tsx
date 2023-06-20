@@ -1,9 +1,8 @@
 import type { NextPage } from 'next'
 import TargetItem from '../../../components/TargetItem'
 import CertificationItem from '../../../components/CertificationItem'
-import RecordItem from '../../../components/RecordItem'
+import StudyItem from '../../../components/StudyItem'
 import { TargetType } from '../../../type/Target.type'
-import { RecordType } from '../../../type/Record.type'
 import { CertificationType } from '../../../type/Certification.type'
 import { useEffect, useState } from 'react'
 import { getAllUserIds, getAuthUser, getUser } from '../../../lib/accounts'
@@ -14,12 +13,20 @@ import { Follower } from '../../../type/Follower.type'
 import { getTargetStatuses, getUserTargets } from '../../../lib/target'
 import { getUserProfile } from '../../../lib/userProfile'
 import { UserProfile } from '../../../type/UserProfile.type'
+import { StudyType } from '../../../type/Study.type'
+import { getUserStudies } from '../../../lib/study'
+import { getCertificationCategories, getUserCertifications } from '../../../lib/certification'
+import { TargetStatus } from '../../../type/TargetStatus.type'
+import { CertificationCategory } from '../../../type/CertificationCategory.type'
 
 type profileType = {
-  userInfo: any;
+  userInfo: UserType;
   userProfile: UserProfile;
-  targets: any;
-  targetStatuses: any;
+  targets: TargetType[];
+  targetStatuses: TargetStatus[];
+  studies: StudyType[];
+  certifiations: CertificationType[];
+  certificationCategories: CertificationCategory[];
   follows: Follower[];
   followers: Follower[];
 }
@@ -32,9 +39,8 @@ const ProfilePage: NextPage<profileType> = (props) => {
   const follows = props.follows;
   const followers: Follower[] = props.followers;
 
-  // 実際は引数で渡す
-  const records: RecordType[] = []
-  const certifications: CertificationType[] = []
+  const studies = props.studies
+  const certifications = props.certifiations
 
   // const filteredTargets = targets?.sort(
   //   (a: any, b: any) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -145,17 +151,19 @@ const ProfilePage: NextPage<profileType> = (props) => {
           <CertificationItem certification={certifications[0]}/>
         }
         {isAuthUser 
-          && <Link href="#">
+          && <Link href={`/profile/${userInfo.id}/certifications/add`}>
             <a className="border rounded border-yellow-400 text-yellow-400">追加</a>
           </Link>}
-        <Link href="#">
+        <Link href={`/profile/${userInfo.id}/certifications`}>
           <a className='border-b border-yellow-400 text-yellow-400 hover:border-yellow-500 hover:text-yellow-500'>資格結果一覧を見る</a>
         </Link>
       </div>
 
       <div className='my-2'>
         <p className='text-green-600'>勉強記録</p>
-        {/* <RecordItem record={staticRecords[0]}/> */}
+        {studies.length > 0 &&
+          <StudyItem study={studies[0]}/>
+        }
         {isAuthUser 
           && <Link href="#">
             <a className="border rounded border-green-400 text-green-400">追加</a>
@@ -175,9 +183,10 @@ export async function getStaticProps({ params }: any) {
   const userProfile = await getUserProfile(params.id);
 
   const targets: TargetType[] = await getUserTargets(params.id);
-  const targetStatuses = await getTargetStatuses();
-  const staticRecords: RecordType[] = [] //ユーザーの勉強記録一覧
-  const staticCertifications: CertificationType[] = [] //ユーザーの資格受験結果一覧
+  const targetStatuses: TargetStatus[] = await getTargetStatuses();
+  const studies: StudyType[] = await getUserStudies(params.id);
+  const certifications: CertificationType[] = await getUserCertifications(params.id);
+  const certificationCategories: CertificationCategory[] = await getCertificationCategories();
 
   const follows = await getFollowUsers(params.id);
   const followers = await getFollowedUsers(params.id);
@@ -188,6 +197,9 @@ export async function getStaticProps({ params }: any) {
       userProfile,
       targets,
       targetStatuses,
+      studies,
+      certifications,
+      certificationCategories,
       follows,
       followers,
     },

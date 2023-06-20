@@ -1,21 +1,56 @@
 import type { NextPage } from 'next'
-import RecordItem from '../../../../components/RecordItem'
-import { RecordType } from '../../../../type/Record.type'
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import StudyItem from '../../../../components/StudyItem';
+import { getAllUserIds, getUser } from '../../../../lib/accounts';
+import { getUserStudies } from '../../../../lib/study';
+import { StudyType } from '../../../../type/Study.type';
+import { UserType } from '../../../../type/User.type';
 
-const RecoredPage: NextPage = () => {
-  const records: RecordType[] = [{content: "", time: ""}];
+type studiesType = {
+  userInfo: UserType;
+  studies: StudyType[];
+}
+
+const StudyPage: NextPage<studiesType> = ({userInfo, studies}) => {
+  const router = useRouter();
 
   return (
     <>
-      <p>ユーザー名さんの勉強記録一覧</p>
+      <p>{userInfo.username}さんの勉強記録一覧</p>
 
-      {records.map((record: RecordType) => 
-        <RecordItem record={record} />
+      {studies.map((study: StudyType) => 
+        <StudyItem study={study} />
       )}
 
-      <p>ユーザーページに戻る</p>
+      <Link href="#">
+        <a onClick={() => router.back()}>ユーザーページに戻る</a>
+      </Link>
     </>
   )
 }
 
-export default RecoredPage;
+export default StudyPage;
+
+export async function getStaticProps({ params }: any) {
+  const userInfo = await getUser(params.id);
+  const studies: StudyType[] = await getUserStudies(params.id);
+
+  return {
+    props: {
+      userInfo, 
+      studies,
+    },
+    revalidate: 3,
+  }
+}
+
+export async function getStaticPaths()
+{
+  const paths = await getAllUserIds();
+
+  return {
+    paths,
+    fallback: true,
+  }
+}

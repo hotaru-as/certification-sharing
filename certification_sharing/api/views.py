@@ -38,7 +38,6 @@ class ListUserTargetView(generics.ListCreateAPIView):
             self.permission_classes = (AllowAny,)
         return super(ListUserTargetView, self).get_permissions()
     def get_queryset(self):
-        print(self.request.GET.get)
         return TargetRecord.objects.filter(user=self.request.GET.get('user'))
 
 class UpdateUserTargetView(generics.UpdateAPIView):
@@ -68,3 +67,34 @@ class ListFollowerView(generics.ListCreateAPIView):
 class DeleteFollowerView(generics.DestroyAPIView):
     serializer_class = FollowerSerializer
     queryset = Follower.objects.all()
+
+class ListUserStudyView(generics.ListCreateAPIView):
+    serializer_class = StudyRecordSerializer
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            self.permission_classes = (AllowAny,)
+        return super(ListUserStudyView, self).get_permissions()
+    def get_queryset(self):
+        return StudyRecord.objects.filter(user=self.request.GET.get('user'))
+
+class UpdateUserStudyView(generics.UpdateAPIView):
+    serializer_class = StudyRecordSerializer
+    queryset = StudyRecord.objects.all()
+
+class ListCertificationView(generics.ListAPIView):
+    serializer_class = CertificationSerializer
+    permission_classes = (AllowAny,)
+    queryset = Certification.objects.all()
+
+class ListUserCertificationView(generics.ListCreateAPIView):
+    serializer_class = CertificationRecordSerializer
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            self.permission_classes = (AllowAny,)
+        return super(ListUserCertificationView, self).get_permissions()
+    def get_queryset(self):
+        return CertificationRecord.objects.filter(user=self.request.GET.get('user'))
+
+class UpdateUserCertificationView(generics.UpdateAPIView):
+    serializer_class = CertificationRecordSerializer
+    queryset = CertificationRecord.objects.all()

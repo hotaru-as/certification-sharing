@@ -24,7 +24,7 @@ export async function getFollowedUsers(followed_id: string): Promise<Follower[]>
   return followers;
 }
 
-export async function getOwnFollowUsers(follow_id?: number, followed_id?: string): Promise<Follower[]> {
+export async function getOwnFollowUsers(follow_id: number, followed_id: number): Promise<Follower[]> {
   const param = {
     "follow_user": follow_id,
     "followed_user": followed_id
