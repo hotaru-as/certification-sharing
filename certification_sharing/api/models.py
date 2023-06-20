@@ -21,7 +21,7 @@ class Certification(models.Model):
 
 class CertificationRecord(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    certiication = models.ForeignKey(Certification, on_delete=models.CASCADE)
+    certification = models.ForeignKey(Certification, on_delete=models.CASCADE)
     result = models.BooleanField(verbose_name='結果', null=True, blank=True)
     exam_date = models.DateField(verbose_name='受験日')
     comment = models.TextField(verbose_name='コメント', max_length=200, null=True, blank=True)

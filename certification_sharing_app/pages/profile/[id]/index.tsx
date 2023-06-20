@@ -25,7 +25,7 @@ type profileType = {
   targets: TargetType[];
   targetStatuses: TargetStatus[];
   studies: StudyType[];
-  certifiations: CertificationType[];
+  certifications: CertificationType[];
   certificationCategories: CertificationCategory[];
   follows: Follower[];
   followers: Follower[];
@@ -40,7 +40,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
   const followers: Follower[] = props.followers;
 
   const studies = props.studies
-  const certifications = props.certifiations
+  const certifications = props.certifications
 
   // const filteredTargets = targets?.sort(
   //   (a: any, b: any) => new Date(b.createdAt) - new Date(a.createdAt)

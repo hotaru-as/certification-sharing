@@ -27,7 +27,7 @@ export async function createUserCertification(
   const body: RequestInit = {
     body: JSON.stringify({
       "user": userId,
-      "certificationId": certificationId,
+      "certification": certificationId,
       "result": result,
       "examDate": examDate,
       "comment": comment
