@@ -17,7 +17,7 @@ const CertificationAddPage: NextPage<CertificationAddType> = ({userInfo, certifi
   const [isOwnUser, setIsOwnUser] = useState(false);
   const [certification, setCertification] = useState(0);
   const [examDate, setExamDate] = useState("");
-  const [result, setResult] = useState(false);
+  const [result, setResult] = useState(true);
   const [comment, setComment] = useState("");
 
   useEffect(() => {
@@ -63,7 +63,8 @@ const CertificationAddPage: NextPage<CertificationAddType> = ({userInfo, certifi
                 onChange={(evt) => setExamDate(evt.target.value)} />
             </label>
             <label>結果
-              <select onChange={(evt) => setResult(evt.target.value == "1" ? true : false)}>
+              <select onChange={(evt) => setResult(evt.target.value == "1" ? true : false)}
+                defaultValue={result ? "1" : "0"}>
                 <option value="1">合格</option>
                 <option value="0">不合格</option>
               </select>

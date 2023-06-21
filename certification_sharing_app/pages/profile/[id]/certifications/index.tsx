@@ -5,14 +5,16 @@ import { UserType } from '../../../../type/User.type'
 import { getAllUserIds, getUser } from '../../../../lib/accounts'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { getUserCertifications } from '../../../../lib/certification'
+import { getCertificationCategories, getUserCertifications } from '../../../../lib/certification'
+import { CertificationCategory } from '../../../../type/CertificationCategory.type'
 
 type certificationsType = {
   userInfo: UserType;
   certifications: CertificationType[];
+  certificationCategories: CertificationCategory[]
 }
 
-const CertificationsPage: NextPage<certificationsType> = ({userInfo, certifications}) => {
+const CertificationsPage: NextPage<certificationsType> = ({userInfo, certifications, certificationCategories}) => {
   const router = useRouter();
 
   return (
@@ -20,7 +22,7 @@ const CertificationsPage: NextPage<certificationsType> = ({userInfo, certificati
       <p>{userInfo.username}さんの資格受験結果一覧</p>
 
       {certifications.map((certification: CertificationType) => 
-        <CertificationItem certification={certification} />
+        <CertificationItem key={certification.id} certification={certification} categories={certificationCategories} />
       )}
 
       <Link href="#">
@@ -35,11 +37,13 @@ export default CertificationsPage;
 export async function getStaticProps({ params }: any) {
   const userInfo = await getUser(params.id);
   const certifications: CertificationType[] = await getUserCertifications(params.id);
+  const certificationCategories: CertificationCategory[] = await getCertificationCategories();
 
   return {
     props: { 
       userInfo,
       certifications,
+      certificationCategories,
     },
     revalidate: 3,
   }

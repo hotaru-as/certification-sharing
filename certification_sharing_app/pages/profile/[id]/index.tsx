@@ -39,8 +39,9 @@ const ProfilePage: NextPage<profileType> = (props) => {
   const follows = props.follows;
   const followers: Follower[] = props.followers;
 
-  const studies = props.studies
-  const certifications = props.certifications
+  const studies = props.studies;
+  const certifications = props.certifications;
+  const certificationCategories = props.certificationCategories;
 
   // const filteredTargets = targets?.sort(
   //   (a: any, b: any) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -148,7 +149,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
       <div className='my-2'>
         <p className='text-yellow-500'>資格結果</p>
         {certifications.length > 0 && 
-          <CertificationItem certification={certifications[0]}/>
+          <CertificationItem certification={certifications[0]} categories={certificationCategories} />
         }
         {isAuthUser 
           && <Link href={`/profile/${userInfo.id}/certifications/add`}>

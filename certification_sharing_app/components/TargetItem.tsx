@@ -8,7 +8,7 @@ const TargetItem: FC<{target: TargetType, statuses: TargetStatus[]}> = ({target,
       <div className="border rounded border-blue-400">
         <p className="font-bold">{target.target}</p>
         <p>期限: {target.targetDeadline}</p>
-        <p>ステータス: {statuses.find((status: any) => status.id == target.status).name}</p>
+        <p>ステータス: {statuses.find((status: TargetStatus) => status.id == target.status).name}</p>
       </div>
     </>
   )

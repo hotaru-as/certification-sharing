@@ -1,6 +1,7 @@
 type CertificationType = {
+  id: number
   userId: number;
-  certificationId: number;
+  certification: number;
   result: boolean;
   examDate: string;
   comment: string;
