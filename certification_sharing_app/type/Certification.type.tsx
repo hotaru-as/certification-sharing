@@ -1,5 +1,5 @@
 type CertificationType = {
-  id: number
+  id: number;
   userId: number;
   certification: number;
   result: boolean;

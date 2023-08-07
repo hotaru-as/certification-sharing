@@ -41,7 +41,14 @@ const CertificationAddPage: NextPage<CertificationAddType> = ({userInfo, certifi
   }
 
   const addCertification = async () => {
-    await createUserCertification(userInfo.id, certification, result, examDate, comment)
+    if (certification == 0)
+    {
+      await createUserCertification(userInfo.id, 1, result, examDate, comment)
+    }
+    else
+    {
+      await createUserCertification(userInfo.id, certification, result, examDate, comment)
+    }
     router.back()
   }
 
@@ -51,30 +58,32 @@ const CertificationAddPage: NextPage<CertificationAddType> = ({userInfo, certifi
         isOwnUser && 
         (
           <>
-            <label>資格
-              <select onChange={(evt) => setCertification(Number(evt.target.value))}>
+            <label className="flex flex-rows" htmlFor="name">
+              <p className="basis-1/12">資格</p>
+              <select className="border basis-1/6" onChange={(evt) => setCertification(Number(evt.target.value))} defaultValue={certificationCategories[0].id}>
                 {certificationCategories.map((category: CertificationCategory) => 
                   <option key={category.id} value={category.id}>{category.name}</option>
                 )}
               </select>
             </label>
-            <label>受験日
-              <input type="date" value={examDate || ""}
+            <label className="flex flex-rows">
+              <p className="basis-1/12">受験日</p>
+              <input className="border basis-1/6" type="date" value={examDate || ""}
                 onChange={(evt) => setExamDate(evt.target.value)} />
             </label>
-            <label>結果
-              <select onChange={(evt) => setResult(evt.target.value == "1" ? true : false)}
+            <label className="block">結果
+              <select className="border" onChange={(evt) => setResult(evt.target.value == "1" ? true : false)}
                 defaultValue={result ? "1" : "0"}>
                 <option value="1">合格</option>
                 <option value="0">不合格</option>
               </select>
             </label>
-            <label>コメント
-              <input type="text" value={comment || ""}
+            <label className="block">コメント
+              <input className="border" type="text" value={comment || ""}
               onChange={(evt) => setComment(evt.target.value)} />
             </label>
-            <button onClick={() => addCertification()}>更新</button>
-            <button onClick={() => router.back()}>キャンセル</button>
+            <button className="border" onClick={() => addCertification()}>更新</button>
+            <button className="border" onClick={() => router.back()}>キャンセル</button>
           </>
         )
       }

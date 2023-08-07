@@ -20,7 +20,7 @@ const StudyPage: NextPage<studiesType> = ({userInfo, studies}) => {
       <p>{userInfo.username}さんの勉強記録一覧</p>
 
       {studies.map((study: StudyType) => 
-        <StudyItem study={study} />
+        <StudyItem key={study.id} study={study} />
       )}
 
       <Link href="#">

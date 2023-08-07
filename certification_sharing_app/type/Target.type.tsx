@@ -1,5 +1,5 @@
 type TargetType = {
-  id: number
+  id: number;
   user: number;
   target: string;
   targetDeadline: string;

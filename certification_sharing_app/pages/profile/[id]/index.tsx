@@ -166,10 +166,10 @@ const ProfilePage: NextPage<profileType> = (props) => {
           <StudyItem study={studies[0]}/>
         }
         {isAuthUser 
-          && <Link href="#">
+          && <Link href={`/profile/${userInfo.id}/studies/add`}>
             <a className="border rounded border-green-400 text-green-400">追加</a>
           </Link>}
-        <Link href="#">
+        <Link href={`/profile/${userInfo.id}/studies`}>
           <a className='border-b border-green-400 text-green-400 hover:border-green-600 hover:text-green-600'>勉強記録一覧を見る</a>
         </Link>
       </div>

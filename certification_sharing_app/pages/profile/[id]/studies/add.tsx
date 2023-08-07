@@ -5,12 +5,17 @@ import { getAllUserIds, getAuthUser, getUser } from "../../../../lib/accounts";
 import { createUserStudy } from "../../../../lib/study";
 import { UserType } from "../../../../type/User.type";
 
-const StudyAddPage: NextPage<UserType> = (userInfo) => {
+type TargetAddType = {
+  userInfo: UserType,
+}
+
+const StudyAddPage: NextPage<TargetAddType> = ({userInfo}) => {
   const router = useRouter();
 
   const [isOwnUser, setIsOwnUser] = useState(false);
   const [content, setContent] = useState("");
-  const [studyTime, setStudyTime] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [comment, setComment] = useState("");
 
   useEffect(() => {
@@ -18,9 +23,9 @@ const StudyAddPage: NextPage<UserType> = (userInfo) => {
   }, []);
   
   const verifyIsOwnUser = async () => {
-    const ownUser: UserType  = await getAuthUser();
+    const ownUser: UserType = await getAuthUser();
 
-    if(ownUser == null) {
+    if(ownUser == null){
       setIsOwnUser(false);
       return;
     }
@@ -34,6 +39,9 @@ const StudyAddPage: NextPage<UserType> = (userInfo) => {
   }
 
   const addStudy = async () => {
+    const studyMillSec = new Date(endTime).getTime() - new Date(startTime).getTime();
+    const studyTime = (studyMillSec/1000).toString()
+    console.log(studyTime)
     await createUserStudy(userInfo.id, content, studyTime, comment);
     router.back();
   }
@@ -48,9 +56,13 @@ const StudyAddPage: NextPage<UserType> = (userInfo) => {
               <input type="text" value={content || ""}
               onChange={(evt) => setContent(evt.target.value)} />
             </label>
-            <label>勉強時間
-              <input type="text" value={studyTime || ""}
-              onChange={(evt) => setStudyTime(evt.target.value)} />
+            <label>開始時刻
+              <input type="datetime-local" value={startTime || ""}
+              onChange={(evt) => setStartTime(evt.target.value)} />
+            </label>
+            <label>終了時刻
+              <input type="datetime-local" value={endTime || ""}
+              onChange={(evt) => setEndTime(evt.target.value)} />
             </label>
             <label>コメント
               <input type="text" value={comment || ""}
