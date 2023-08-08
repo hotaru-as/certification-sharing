@@ -2,10 +2,10 @@ import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import { getAllUserIds, getAuthUser, getUser } from '../../../lib/accounts'
 import { UserType } from '../../../type/User.type'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { getUserProfile, updateUserProfile } from '../../../lib/userProfile'
 import { UserProfile } from '../../../type/UserProfile.type'
+import Layout from '../../../components/Layout'
 
 type profileType = {
   userInfo: any,
@@ -51,27 +51,39 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
   }
   
   return (
-    <>
+    <Layout title='ProfileEdit'>
     {
       isOwnUser &&
       (<>
-        <label>アイコン
-          <input type="file"
-            onChange={evt => updateIcon(evt)}></input>
-        </label>
-        <label>自己紹介
-          <input type="text" value={introduction || ""}
-            onChange={evt => setIntroduction(evt.target.value)}></input>
-        </label>
-        <label>誕生日
-          <input type="date" value={birthDay || ""}
-            onChange={evt => setBirthDay(evt.target.value)}></input>
-        </label>
-        <button onClick={() => updateProfile()}>更新</button>
-        <button onClick={() => router.back()}>キャンセル</button>
+        <div className="m-4">
+          <h2 className="font-semibold text-pink-600 ml-1 mt-1">プロフィールを編集する</h2>
+          <label className="flex flex-rows p-1">
+            <p className="basis-20">アイコン</p>
+            <input  className="border border-gray-800 basis-auto"
+              type="file" onChange={evt => updateIcon(evt)}></input>
+          </label>
+          <label className="flex flex-rows p-1">
+            <p className="basis-20">自己紹介</p>
+            <textarea className="border border-gray-800 basis-1/3"
+              value={introduction || ""}
+              onChange={evt => setIntroduction(evt.target.value)}></textarea>
+          </label>
+          <label className="flex flex-rows p-1">
+            <p className="basis-20">誕生日</p>
+            <input className="border border-gray-800 basis-auto"
+              type="date" value={birthDay || ""}
+              onChange={evt => setBirthDay(evt.target.value)}></input>
+          </label>
+          <div className="flex flex-rows">
+            <button className="border border-pink-600 basis-20 m-1 rounded bg-pink-600 text-white"
+              onClick={() => updateProfile()}>更新</button>
+            <button className="border border-pink-600 basis-20 m-1 rounded text-pink-600"
+              onClick={() => router.back()}>キャンセル</button>
+          </div>
+        </div>
       </>)
     }
-    </>
+    </Layout>
   )
 }
 

@@ -12,11 +12,15 @@ export default function Layout({ children, title = "Default title" }: LayoutProp
       <Head>
         <title>{title}</title>
       </Head>
-      <main>
+      <header className="bg-red-200 h-auto">
+        <h1 className="text-white text-center text-3xl p-4 font-extrabold">Study Sharing</h1>
+      </header>
+      {/* <main className="w-auto md:max-w-screen-md m-4 md:m-8"> */}
+      <main className="w-auto md:max-w-screen-md m-4 md:mx-auto">
         {children}
       </main>
-      <footer>
-        @Hotaru
+      <footer className="bg-red-200">
+        <p className="text-white text-center">@Hotaru</p>
       </footer>
     </div>
   )

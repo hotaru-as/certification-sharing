@@ -21,7 +21,7 @@ const Home: NextPage<{staticPosts: any}> = ({staticPosts}) => {
 
   const isLogin = true;
   return (
-    <Layout>
+    <Layout title='TimeLine'>
       <div>
         <div>
           {isLogin

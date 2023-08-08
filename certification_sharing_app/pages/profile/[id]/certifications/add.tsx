@@ -5,6 +5,7 @@ import { getAllUserIds, getAuthUser, getUser } from "../../../../lib/accounts";
 import { createUserCertification, getCertificationCategories } from "../../../../lib/certification";
 import { CertificationCategory } from "../../../../type/CertificationCategory.type";
 import { UserType } from "../../../../type/User.type";
+import Layout from "../../../../components/Layout";
 
 type CertificationAddType = {
   userInfo: UserType;
@@ -57,34 +58,48 @@ const CertificationAddPage: NextPage<CertificationAddType> = ({userInfo, certifi
       {
         isOwnUser && 
         (
-          <>
-            <label className="flex flex-rows" htmlFor="name">
-              <p className="basis-1/12">資格</p>
-              <select className="border basis-1/6" onChange={(evt) => setCertification(Number(evt.target.value))} defaultValue={certificationCategories[0].id}>
-                {certificationCategories.map((category: CertificationCategory) => 
-                  <option key={category.id} value={category.id}>{category.name}</option>
-                )}
-              </select>
-            </label>
-            <label className="flex flex-rows">
-              <p className="basis-1/12">受験日</p>
-              <input className="border basis-1/6" type="date" value={examDate || ""}
-                onChange={(evt) => setExamDate(evt.target.value)} />
-            </label>
-            <label className="block">結果
-              <select className="border" onChange={(evt) => setResult(evt.target.value == "1" ? true : false)}
-                defaultValue={result ? "1" : "0"}>
-                <option value="1">合格</option>
-                <option value="0">不合格</option>
-              </select>
-            </label>
-            <label className="block">コメント
-              <input className="border" type="text" value={comment || ""}
-              onChange={(evt) => setComment(evt.target.value)} />
-            </label>
-            <button className="border" onClick={() => addCertification()}>更新</button>
-            <button className="border" onClick={() => router.back()}>キャンセル</button>
-          </>
+          <Layout title="CertificationEdit">
+            <div className="m-4 border rounded-tr-2xl bg-yellow-200 w-96">
+              <h2 className="font-semibold text-yellow-600 ml-1 mt-1">資格結果を新規登録する</h2>
+              <label className="flex flex-rows p-2">
+                <p className="basis-20">資格</p>
+                <select className="border border-gray-800 basis-1/6" 
+                  onChange={(evt) => setCertification(Number(evt.target.value))} 
+                  defaultValue={certificationCategories[0].id}>
+                  {certificationCategories.map((category: CertificationCategory) => 
+                    <option key={category.id} value={category.id}>{category.name}</option>
+                  )}
+                </select>
+              </label>
+              <label className="flex flex-rows p-2">
+                <p className="basis-20">受験日</p>
+                <input className="border border-gray-800 basis-auto" 
+                  type="date" value={examDate || ""}
+                  onChange={(evt) => setExamDate(evt.target.value)} />
+              </label>
+              <label className="flex flex-rows p-2">
+                <p className="basis-20">結果</p>
+                <select className="border border-gray-800 basis-auto" 
+                  onChange={(evt) => setResult(evt.target.value == "1" ? true : false)}
+                  defaultValue={result ? "1" : "0"}>
+                  <option value="1">合格</option>
+                  <option value="0">不合格</option>
+                </select>
+              </label>
+              <label className="flex flex-rows p-2">
+                <p className="basis-20">コメント</p>
+                <textarea className="border border-gray-800 basis-auto" 
+                  value={comment || ""}
+                  onChange={(evt) => setComment(evt.target.value)} />
+              </label>
+              <div className="flex flex-rows">
+                <button className="border border-yellow-600 basis-20 m-1 rounded bg-yellow-600 text-white"
+                  onClick={() => addCertification()}>更新</button>
+                <button className="border border-yellow-600 basis-20 m-1 rounded text-yellow-600"
+                  onClick={() => router.back()}>キャンセル</button>
+              </div>
+            </div>
+          </Layout>
         )
       }
     </>

@@ -1,9 +1,12 @@
 import type { NextPage } from 'next'
 import Register from '../components/Register'
+import Layout from '../components/Layout'
 
 const RegisterPage: NextPage = () => {
   return (
-    <Register />
+    <Layout title="Login">
+      <Register />
+    </Layout>
   )
 }
   

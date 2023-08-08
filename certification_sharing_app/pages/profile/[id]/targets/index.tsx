@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { getTargetStatuses, getUserTargets } from '../../../../lib/target';
 import { TargetStatus } from '../../../../type/TargetStatus.type';
 import { UserType } from '../../../../type/User.type';
+import Layout from '../../../../components/Layout';
 
 type targetsType = {
   userInfo: UserType,
@@ -18,17 +19,19 @@ const TargetPage: NextPage<targetsType> = ({userInfo, targets, targetStatuses}) 
   const router = useRouter();
 
   return (
-    <>
-      <p>{userInfo.username}さんの目標一覧</p>
+    <Layout title='Targets'>
+      <div className='my-2 max-w-sm'>
+        <p className='text-blue-600'>{userInfo.username}さんの目標一覧</p>
 
-      {targets.map((target: TargetType) => 
-        <TargetItem key={target.id} target={target} statuses={targetStatuses} />
-      )}
+        {targets.map((target: TargetType) => 
+          <TargetItem key={target.id} target={target} statuses={targetStatuses} />
+        )}
 
-      <Link href="#">
-        <a onClick={() => router.back()}>ユーザーページに戻る</a>
-      </Link>
-    </>
+        <Link href="#">
+          <a className="text-blue-400" onClick={() => router.back()}>ユーザーページに戻る</a>
+        </Link>
+      </div>
+    </Layout>
   )
 }
 
