@@ -4,7 +4,7 @@ from .models import UserProfile, Follower, RecordCategory, Certification, Certif
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('user_id', 'introduction', 'birth_day', 'icon_url')
+        fields = ('user_id', 'introduction', 'birth_day', 'icon_img')
 
 class FollowerSerializer(serializers.ModelSerializer):
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)

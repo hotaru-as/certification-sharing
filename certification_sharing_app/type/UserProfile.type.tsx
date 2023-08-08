@@ -2,7 +2,7 @@ type UserProfile = {
   userId: number;
   introduction: string;
   birthDay: string;
-  iconUrl: string;
+  iconImg: any;
 }
 
 export type {UserProfile}

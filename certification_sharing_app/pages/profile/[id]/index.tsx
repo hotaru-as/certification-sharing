@@ -103,7 +103,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
   return (
     <>
       <div className="flex flex-row">
-        <p className='basis-1/4'>アイコン</p>
+        <img className='basis-1/4' src={userProfile.iconImg} />
         <div className='basis-3/4'>
           <p className='font-bold'>{userInfo.username}</p>
           <p>{userProfile.introduction}</p>

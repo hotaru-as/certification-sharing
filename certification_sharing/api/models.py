@@ -5,7 +5,7 @@ class UserProfile(models.Model):
     user_id = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     introduction = models.TextField(verbose_name='自己紹介', max_length=1000, null=True, blank=True)
     birth_day = models.DateField(verbose_name='誕生日', null=True, blank=True)
-    icon_url = models.CharField('アイコン画像', max_length=100, null=True, blank=True)
+    icon_img = models.ImageField(verbose_name='アイコン画像', null=True, blank=True)
 
 class Follower(models.Model):
     follow_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='follow_user')

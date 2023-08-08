@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from .serializers import *
 from .models import *
 
@@ -9,6 +10,7 @@ class UpdateUserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer
     queryset = UserProfile.objects.all()
     permission_classes = (AllowAny,)
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_permissions(self):
         if self.request.method == 'GET':
@@ -18,6 +20,8 @@ class UpdateUserProfileView(generics.RetrieveUpdateAPIView):
 class CreateUserProfileView(generics.CreateAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = (AllowAny,)
+    # parser_classes = (MultiPartParser, FormParser, JSONParser) # imgがnullだからとりあえず設定しなくても問題なし
+
     def create(self, request, *args, **kwargs):
         # Custom permission 作る？
         if (str(request.data['user_id']) != str(self.request.user.id)):

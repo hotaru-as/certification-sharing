@@ -18,7 +18,7 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
   const [isOwnUser, setIsOwnUser] = useState(false);
   const [introduction, setIntroduction] = useState(userProfile.introduction);
   const [birthDay, setBirthDay] = useState(userProfile.birthDay)
-  const [iconUrl, setIconUrl] = useState(userProfile.iconUrl)
+  const [iconImg, setIconImg] = useState(userProfile.iconImg)
 
   useEffect(() => {
     verifyIsOwnUser();
@@ -41,18 +41,23 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
   }
 
   const updateProfile = async () => {
-    await updateUserProfile(userInfo.id, introduction, birthDay, iconUrl);
+    await updateUserProfile(userInfo.id, introduction, birthDay, iconImg);
     router.back()
   }
 
+  const updateIcon = (evt: any) => {
+    const files = evt.target.files
+    setIconImg(files[0])
+  }
+  
   return (
     <>
     {
       isOwnUser &&
       (<>
         <label>アイコン
-          <input type="text" value={iconUrl || ""}
-            onChange={evt => setIconUrl(evt.target.value)}></input>
+          <input type="file"
+            onChange={evt => updateIcon(evt)}></input>
         </label>
         <label>自己紹介
           <input type="text" value={introduction || ""}
