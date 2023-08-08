@@ -19,9 +19,9 @@ const StudyPage: NextPage<studiesType> = ({userInfo, studies}) => {
   return (
     <Layout title='Studies'>
       <div className='my-2 max-w-sm'>
-        <p className='text-green-600'>{userInfo.username}さんの勉強記録一覧</p>
+        <p className='text-green-600'>{userInfo && userInfo.username}さんの勉強記録一覧</p>
 
-        {studies.map((study: StudyType) => 
+        {studies && studies.map((study: StudyType) => 
           <StudyItem key={study.id} study={study} />
         )}
 

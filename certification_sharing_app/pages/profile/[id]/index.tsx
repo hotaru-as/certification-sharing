@@ -48,8 +48,8 @@ const ProfilePage: NextPage<profileType> = (props) => {
   //   (a: any, b: any) => new Date(b.createdAt) - new Date(a.createdAt)
   // )
 
-  const [followNum, setFollowNum] = useState(follows.length);
-  const [followerNum, setFollowerNum] = useState(followers.length);
+  const [followNum, setFollowNum] = useState(follows ? follows.length : 0);
+  const [followerNum, setFollowerNum] = useState(followers ? followers.length : 0);
   const [isFollow, setIsFollow] = useState(false);
   const [isAuthUser, setIsAuthUser] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
@@ -81,7 +81,9 @@ const ProfilePage: NextPage<profileType> = (props) => {
   const verifyIsAuthUser = async () => {
     const authUser: UserType = await getAuthUser();
 
-   if(authUser != null && authUser.id == userInfo.id)
+    if(!userInfo) return;
+
+    if(authUser != null && authUser.id == userInfo.id)
     {
       setIsAuthUser(true);
       return;
@@ -93,9 +95,11 @@ const ProfilePage: NextPage<profileType> = (props) => {
   const verifyIsFollow = async () => {
     const authUser: UserType = await getAuthUser();
 
+    if(!userInfo) return;
+
     if(authUser != null) {
       const follower = await getOwnFollowUsers(authUser.id, userInfo.id);
-      if(follower.length != 0) {
+      if(follower && follower.length != 0) {
         setIsFollow(true);
       }
     }
@@ -121,28 +125,34 @@ const ProfilePage: NextPage<profileType> = (props) => {
   return (
     <Layout title='Profile'>
       <div className="flex flex-row h-auto mb-4 mx-auto">
-        <div className='basis-3/12'>
-          {
-            userProfile.iconImg
-            ? <img className='rounded' 
-                src={userProfile.iconImg} />
-            : <img className='rounded-full' 
-                src="http://127.0.0.1:8000/media/hotaru.png" />
-          }
-        </div>
-        {/* <div className='basis-9/12 md:basis-2/4 m-2'> */}
-        <div className='basis-9/12 md:basis-2/4 m-2 md:m-10'>
-          <div className='h-1/3'>
-            <h2 className='font-bold text-2xl text-center m-auto'>{userInfo.username}</h2>
-          </div>
-          <p>{userProfile.introduction}</p>
-          {userProfile.birthDay &&
-          <p>誕生日: {userProfile.birthDay}</p>}
-          {isAuthUser 
-            && <Link href={`/profile/${userInfo.id}/profile-edit`}>
-              <a className='text-red-300'>プロフィールを編集する</a>
-            </Link>}
-        </div>
+        {
+          userProfile &&
+          <>
+            <div className='basis-3/12'>
+              {
+                (userProfile.iconImg)
+                ? <img className='rounded' 
+                    src={userProfile.iconImg} />
+                : <img className='rounded-full' 
+                    src="http://127.0.0.1:8000/media/hotaru.png" />
+              }
+            </div>
+            {/* <div className='basis-9/12 md:basis-2/4 m-2'> */}
+            <div className='basis-9/12 md:basis-2/4 m-2 md:m-10'>
+              <div className='h-1/3'>
+                <h2 className='font-bold text-2xl text-center m-auto'>{userInfo && userInfo.username}</h2>
+              </div>
+              <p>{userProfile.introduction}</p>
+              {userProfile.birthDay &&
+              <p>誕生日: {userProfile.birthDay}</p>}
+              {isAuthUser 
+                && <Link href={`/profile/${userInfo.id}/profile-edit`}>
+                  <a className='text-red-300'>プロフィールを編集する</a>
+                </Link>}
+            </div>
+          </>          
+        }
+
       </div>
 
       <div className='flex flex-row'>
@@ -162,47 +172,53 @@ const ProfilePage: NextPage<profileType> = (props) => {
             <button onClick={() => deleteFollowerNum()}>フォローを解除する</button>
             : <button onClick={() => addFollowerNum()}>フォローする</button>))}
 
-      <div className='my-2 mx-auto max-w-sm'>
-        <p className='text-blue-600'>目標</p>
-        {targets.length > 0 &&
-          <TargetItem target={targets[0]} statuses={targetStatuses} />
-        }
-        {isAuthUser 
-          && <Link href={`/profile/${userInfo.id}/targets/add`}>
-            <a className="border rounded border-blue-400 text-blue-400">追加</a>
-          </Link>}
-        <Link href={`/profile/${userInfo.id}/targets`}>
-          <a className='border-b border-blue-400 text-blue-400 hover:border-blue-600 hover:text-blue-600'>目標一覧を見る</a>
-        </Link>
-      </div>
+      {
+        (userInfo && userInfo.id !== 0) &&
+        <>
+          <div className='my-2 mx-auto max-w-sm'>
+            <p className='text-blue-600'>目標</p>
+            {(targets && targets.length > 0) &&
+              <TargetItem target={targets[0]} statuses={targetStatuses} />
+            }
+            {isAuthUser 
+              && <Link href={`/profile/${userInfo.id}/targets/add`}>
+                <a className="border rounded border-blue-400 text-blue-400">追加</a>
+              </Link>}
+            <Link href={`/profile/${userInfo.id}/targets`}>
+              <a className='border-b border-blue-400 text-blue-400 hover:border-blue-600 hover:text-blue-600'>目標一覧を見る</a>
+            </Link>
+          </div>
 
-      <div className='my-2 mx-auto max-w-sm'>
-        <p className='text-yellow-500'>資格結果</p>
-        {certifications.length > 0 && 
-          <CertificationItem certification={certifications[0]} categories={certificationCategories} />
-        }
-        {isAuthUser 
-          && <Link href={`/profile/${userInfo.id}/certifications/add`}>
-            <a className="border rounded border-yellow-400 text-yellow-400">追加</a>
-          </Link>}
-        <Link href={`/profile/${userInfo.id}/certifications`}>
-          <a className='border-b border-yellow-400 text-yellow-400 hover:border-yellow-500 hover:text-yellow-500'>資格結果一覧を見る</a>
-        </Link>
-      </div>
+          <div className='my-2 mx-auto max-w-sm'>
+            <p className='text-yellow-500'>資格結果</p>
+            {(certifications && certifications.length) > 0 && 
+              <CertificationItem certification={certifications[0]} categories={certificationCategories} />
+            }
+            {isAuthUser 
+              && <Link href={`/profile/${userInfo.id}/certifications/add`}>
+                <a className="border rounded border-yellow-400 text-yellow-400">追加</a>
+              </Link>}
+            <Link href={`/profile/${userInfo.id}/certifications`}>
+              <a className='border-b border-yellow-400 text-yellow-400 hover:border-yellow-500 hover:text-yellow-500'>資格結果一覧を見る</a>
+            </Link>
+          </div>
 
-      <div className='my-2 mx-auto max-w-sm'>
-        <p className='text-green-600'>勉強記録</p>
-        {studies.length > 0 &&
-          <StudyItem study={studies[0]}/>
-        }
-        {isAuthUser 
-          && <Link href={`/profile/${userInfo.id}/studies/add`}>
-            <a className="border rounded border-green-400 text-green-400">追加</a>
-          </Link>}
-        <Link href={`/profile/${userInfo.id}/studies`}>
-          <a className='border-b border-green-400 text-green-400 hover:border-green-600 hover:text-green-600'>勉強記録一覧を見る</a>
-        </Link>
-      </div>
+          <div className='my-2 mx-auto max-w-sm'>
+            <p className='text-green-600'>勉強記録</p>
+            {(studies && studies.length > 0) &&
+              <StudyItem study={studies[0]}/>
+            }
+            {isAuthUser 
+              && <Link href={`/profile/${userInfo.id}/studies/add`}>
+                <a className="border rounded border-green-400 text-green-400">追加</a>
+              </Link>}
+            <Link href={`/profile/${userInfo.id}/studies`}>
+              <a className='border-b border-green-400 text-green-400 hover:border-green-600 hover:text-green-600'>勉強記録一覧を見る</a>
+            </Link>
+          </div>
+        </>
+      }
+
     </Layout>
   )
 }

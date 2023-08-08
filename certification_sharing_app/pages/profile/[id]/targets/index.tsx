@@ -21,9 +21,9 @@ const TargetPage: NextPage<targetsType> = ({userInfo, targets, targetStatuses}) 
   return (
     <Layout title='Targets'>
       <div className='my-2 max-w-sm'>
-        <p className='text-blue-600'>{userInfo.username}さんの目標一覧</p>
+        <p className='text-blue-600'>{userInfo && userInfo.username}さんの目標一覧</p>
 
-        {targets.map((target: TargetType) => 
+        {targets && targets.map((target: TargetType) => 
           <TargetItem key={target.id} target={target} statuses={targetStatuses} />
         )}
 

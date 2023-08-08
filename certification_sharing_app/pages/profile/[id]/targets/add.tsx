@@ -18,7 +18,7 @@ const TargetAddPage: NextPage<TargetAddType> = ({ userInfo, targetStatuses }) =>
   const [isOwnUser, setIsOwnUser] = useState(false);
   const [target, setTarget] = useState("");
   const [deadline, setDeadline] = useState("");
-  const [status, setStatus] = useState(targetStatuses[0].id);
+  const [status, setStatus] = useState(targetStatuses ? targetStatuses[0].id : 1);
   const [comment, setComment] = useState("");
 
   useEffect(() => {

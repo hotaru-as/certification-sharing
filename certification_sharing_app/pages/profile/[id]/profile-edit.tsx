@@ -16,9 +16,9 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
   const router = useRouter();
 
   const [isOwnUser, setIsOwnUser] = useState(false);
-  const [introduction, setIntroduction] = useState(userProfile.introduction);
-  const [birthDay, setBirthDay] = useState(userProfile.birthDay)
-  const [iconImg, setIconImg] = useState(userProfile.iconImg)
+  const [introduction, setIntroduction] = useState(userProfile ? userProfile.introduction : "");
+  const [birthDay, setBirthDay] = useState(userProfile ? userProfile.birthDay : "")
+  const [iconImg, setIconImg] = useState(userProfile ? userProfile.iconImg : "")
 
   useEffect(() => {
     verifyIsOwnUser();

@@ -21,9 +21,9 @@ const CertificationsPage: NextPage<certificationsType> = ({userInfo, certificati
   return (
     <Layout title='Certifications'>
       <div className='my-2 max-w-sm'>
-        <p className='text-yellow-600'>{userInfo.username}さんの資格受験結果一覧</p>
+        <p className='text-yellow-600'>{userInfo && userInfo.username}さんの資格受験結果一覧</p>
 
-        {certifications.map((certification: CertificationType) => 
+        {certifications && certifications.map((certification: CertificationType) => 
           <CertificationItem key={certification.id} certification={certification} categories={certificationCategories} />
         )}
 
