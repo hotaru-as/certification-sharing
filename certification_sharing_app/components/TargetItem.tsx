@@ -10,7 +10,7 @@ const TargetItem: FC<{target: TargetType, statuses: TargetStatus[]}> = ({target,
           目標: {target.target}
         </p>
         <p>期限: {target.targetDeadline}</p>
-        <p>ステータス: {statuses.find((status: TargetStatus) => status.id == target.status).name}</p>
+        <p>ステータス: {statuses.find((status: TargetStatus) => status.id.toString() == target.status)?.name}</p>
       </div>
     </>
   )

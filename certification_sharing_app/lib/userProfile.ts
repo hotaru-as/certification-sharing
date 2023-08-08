@@ -5,12 +5,26 @@ import Cookie from "universal-cookie";
 const cookie = new Cookie();
 
 export async function getUserProfile(id: string): Promise<UserProfile> {
-  const userProfile = await sendRequest<UserProfile>(`api/users/${id}/profile/`, "GET", false)
+  const initValue: UserProfile = {
+    userId: 0,
+    introduction: "",
+    birthDay: "",
+    iconImg: ""  
+  }
+  
+  const userProfile = await sendRequest<UserProfile>(initValue, `api/users/${id}/profile/`, "GET", false)
   console.log(userProfile)
   return userProfile;
 }
 export async function createUserProfile(id: number): Promise<void>
 {
+  const initValue: UserProfile = {
+    userId: 0,
+    introduction: "",
+    birthDay: "",
+    iconImg: ""  
+  }
+  
   const body: RequestInit = {
     body: JSON.stringify({
         "user_id": id,
@@ -20,7 +34,7 @@ export async function createUserProfile(id: number): Promise<void>
     })
   }
 
-  await sendRequest<UserProfile>(`api/users/profile/`, "POST", true, body)
+  await sendRequest<UserProfile>(initValue, `api/users/profile/`, "POST", true, body)
   return;
 }
 

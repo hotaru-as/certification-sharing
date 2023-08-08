@@ -52,6 +52,11 @@ const ProfilePage: NextPage<profileType> = (props) => {
   const [followerNum, setFollowerNum] = useState(followers.length);
   const [isFollow, setIsFollow] = useState(false);
   const [isAuthUser, setIsAuthUser] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    verifyIsLogin();
+  }, [])
 
   useEffect(() => {
     verifyIsAuthUser();
@@ -60,6 +65,18 @@ const ProfilePage: NextPage<profileType> = (props) => {
   useEffect(() => {
     verifyIsFollow();
   }, [])
+
+  const verifyIsLogin = async () => {
+    const authUser: UserType = await getAuthUser();
+
+   if(Object.keys(authUser).length !== 0)
+    {
+      setIsLogin(true);
+      return;
+    }
+
+    setIsLogin(false);
+  }
 
   const verifyIsAuthUser = async () => {
     const authUser: UserType = await getAuthUser();
@@ -138,11 +155,12 @@ const ProfilePage: NextPage<profileType> = (props) => {
           <a>タイムラインを見る</a>
         </Link>} 
 
-      {isAuthUser 
-        || (
-          isFollow ?
+      {isLogin 
+        && (
+          isAuthUser
+          || (isFollow ?
             <button onClick={() => deleteFollowerNum()}>フォローを解除する</button>
-            : <button onClick={() => addFollowerNum()}>フォローする</button>)}
+            : <button onClick={() => addFollowerNum()}>フォローする</button>))}
 
       <div className='my-2 mx-auto max-w-sm'>
         <p className='text-blue-600'>目標</p>

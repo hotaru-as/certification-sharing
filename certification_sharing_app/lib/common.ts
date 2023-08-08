@@ -1,7 +1,7 @@
 import Cookie from "universal-cookie";
 const cookie = new Cookie();
 
-export async function sendRequest<T>(uri: string, method: string, auth: boolean, body?: RequestInit): Promise<T>
+export async function sendRequest<T>(initValue: T, uri: string, method: string, auth: boolean, body?: RequestInit): Promise<T>
 {
   var headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -28,14 +28,14 @@ export async function sendRequest<T>(uri: string, method: string, auth: boolean,
       request,
     )
     .then((res) => {
-      if (res.status !== 200) {
+      if (!res.ok) {
         throw "authentication failed";
-      } else if (res.ok) {
+      } else {
         return res.json()
       }
     });
     return data;
   } catch(err) {
-    return {};
+    return initValue;
   }
 }
