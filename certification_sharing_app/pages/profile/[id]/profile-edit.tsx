@@ -1,14 +1,15 @@
 import type { NextPage } from 'next'
-import { useEffect, useState } from 'react'
-import { getAllUserIds, getAuthUser, getUser } from '../../../lib/accounts'
-import { UserType } from '../../../type/User.type'
 import { useRouter } from 'next/router'
-import { getUserProfile, updateUserProfile } from '../../../lib/userProfile'
-import { UserProfile } from '../../../type/UserProfile.type'
-import Layout from '../../../components/Layout/Layout'
+import { useEffect, useState } from 'react'
+
 import InputLayout from '../../../components/Layout/EditItem/InputLayout'
+import Layout from '../../../components/Layout/Layout'
 import TextAreaLayout from '../../../components/Layout/EditItem/TextAreaLayout'
 import UpdateCancelButtonLayout from '../../../components/Layout/EditItem/UpdateCancelButtonLayout'
+
+import { getAllUserIds, getUser, verifyIsOwnUser } from '../../../lib/accounts'
+import { getUserProfile, updateUserProfile } from '../../../lib/userProfile'
+import { UserProfile } from '../../../type/UserProfile.type'
 
 type profileType = {
   userInfo: any,
@@ -24,23 +25,12 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
   const [iconImg, setIconImg] = useState(userProfile ? userProfile.iconImg : "")
 
   useEffect(() => {
-    verifyIsOwnUser();
+    verifyIsOwnUser2();
   }, [])
 
-  const verifyIsOwnUser = async () => {
-    const ownUser: UserType= await getAuthUser();
-
-    if(ownUser == null){
-      setIsOwnUser(false);
-      return;
-    }
-
-    if(ownUser.id == userInfo.id)
-    {
-      setIsOwnUser(true);
-      return;
-    }
-    setIsOwnUser(false);    
+  const verifyIsOwnUser2 = async () => {
+    const isOwnUser = await verifyIsOwnUser(userInfo);
+    setIsOwnUser(isOwnUser);
   }
 
   const updateProfile = async () => {
@@ -90,6 +80,7 @@ export async function getStaticProps({ params }: any) {
       userProfile,
     },
     revalidate: 3,
+    notFound: !userInfo || userInfo.id == 0,
   }
 }
 

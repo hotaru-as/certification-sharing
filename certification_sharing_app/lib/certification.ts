@@ -2,6 +2,9 @@ import { URLSearchParams } from "next/dist/compiled/@edge-runtime/primitives/url
 import { CertificationType } from "../type/Certification.type";
 import { CertificationCategory } from "../type/CertificationCategory.type";
 import { sendRequest } from "./common";
+import { PostType } from "../type/Post.type";
+import { UserType } from "../type/User.type";
+import { UserProfile } from "../type/UserProfile.type";
 
 export async function getCertificationCategories(): Promise<CertificationCategory[]>
 {
@@ -62,4 +65,33 @@ export async function createUserCertification(
 
   await sendRequest<CertificationType[]>(initValue, `api/certifications/`, "POST", true, body);
   return;
+}
+
+export async function convertCertificationsToPosts(user: UserType, userProfile: UserProfile)
+  : Promise<PostType[]>
+{
+  const posts: PostType[] = [];
+  const certificationCategories = await getCertificationCategories();
+
+  const certifications: CertificationType[] = await getUserCertifications(user.id);
+  certifications.map((certification: CertificationType) => {
+    const certificationCategory = certificationCategories.find((category: CertificationCategory) => category.id == certification.certification)
+    if (certificationCategory == null) return;
+    const certificationName = certificationCategory.name
+
+    const post: PostType = {
+      id: certification.id,
+      user_id: user.id,
+      user_name: user.username,
+      user_img: userProfile.iconImg ? userProfile.iconImg : "http://127.0.0.1:8000/media/hotaru.png",
+      post_type: "certification",
+      result: `${user.username}さんが${certificationName}の結果を報告しました！`,
+      status: `結果: ${certification.result}`,
+      comment: certification.comment,
+      createdAt: certification.createdAt
+    }
+    posts.push(post)
+  })
+
+  return posts;
 }

@@ -1,24 +1,27 @@
-import type { NextPage } from 'next'
-import TargetItem from '../../../components/TargetItem'
-import CertificationItem from '../../../components/CertificationItem'
-import StudyItem from '../../../components/StudyItem'
-import { TargetType } from '../../../type/Target.type'
-import { CertificationType } from '../../../type/Certification.type'
 import { useEffect, useState } from 'react'
-import { getAllUserIds, getAuthUser, getUser } from '../../../lib/accounts'
-import { UserType } from '../../../type/User.type'
+import type { NextPage } from 'next'
 import Link from 'next/link'
-import { addFollowUser, deleteFollowUser, getFollowedUsers, getFollowUsers, getOwnFollowUsers } from '../../../lib/follower'
+
+import FollowerView from '../../../components/Profile/FollowerView'
+import ItemList from '../../../components/Item/ItemList'
+import Layout from '../../../components/Layout/Layout'
+import Profile from '../../../components/Profile/Profile'
+
+import { CertificationType } from '../../../type/Certification.type'
+import { CertificationCategory } from '../../../type/CertificationCategory.type'
 import { Follower } from '../../../type/Follower.type'
+import { StudyType } from '../../../type/Study.type'
+import { TargetStatus } from '../../../type/TargetStatus.type'
+import { TargetType } from '../../../type/Target.type'
+import { UserProfile } from '../../../type/UserProfile.type'
+import { UserType } from '../../../type/User.type'
+
+import { getAllUserIds, getAuthUser, getUser, verifyIsOwnUser } from '../../../lib/accounts'
+import { getCertificationCategories, getUserCertifications } from '../../../lib/certification'
+import { getFollowedUsers, getFollowUsers } from '../../../lib/follower'
+import { getUserStudies } from '../../../lib/study'
 import { getTargetStatuses, getUserTargets } from '../../../lib/target'
 import { getUserProfile } from '../../../lib/userProfile'
-import { UserProfile } from '../../../type/UserProfile.type'
-import { StudyType } from '../../../type/Study.type'
-import { getUserStudies } from '../../../lib/study'
-import { getCertificationCategories, getUserCertifications } from '../../../lib/certification'
-import { TargetStatus } from '../../../type/TargetStatus.type'
-import { CertificationCategory } from '../../../type/CertificationCategory.type'
-import Layout from '../../../components/Layout/Layout'
 
 type profileType = {
   userInfo: UserType;
@@ -44,181 +47,39 @@ const ProfilePage: NextPage<profileType> = (props) => {
   const certifications = props.certifications;
   const certificationCategories = props.certificationCategories;
 
-  // const filteredTargets = targets?.sort(
-  //   (a: any, b: any) => new Date(b.createdAt) - new Date(a.createdAt)
-  // )
-
-  const [followNum, setFollowNum] = useState(follows ? follows.length : 0);
-  const [followerNum, setFollowerNum] = useState(followers ? followers.length : 0);
-  const [isFollow, setIsFollow] = useState(false);
   const [isAuthUser, setIsAuthUser] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
-
-  useEffect(() => {
-    verifyIsLogin();
-  }, [])
+  const [authUser, setAuthUser] = useState<UserType | undefined>(undefined);
 
   useEffect(() => {
     verifyIsAuthUser();
   }, [])
 
-  useEffect(() => {
-    verifyIsFollow();
-  }, [])
-
-  const verifyIsLogin = async () => {
-    const authUser: UserType = await getAuthUser();
-
-   if(Object.keys(authUser).length !== 0)
-    {
-      setIsLogin(true);
-      return;
-    }
-
-    setIsLogin(false);
-  }
-
   const verifyIsAuthUser = async () => {
-    const authUser: UserType = await getAuthUser();
+    const isOwnUser =await verifyIsOwnUser(userInfo);
+    setIsAuthUser(isOwnUser);
 
-    if(!userInfo) return;
-
-    if(authUser != null && authUser.id == userInfo.id)
+    if(isOwnUser)
     {
-      setIsAuthUser(true);
-      return;
+      const authUser: UserType = await getAuthUser();
+      setAuthUser(authUser)
     }
-
-    setIsAuthUser(false);
-  }
-
-  const verifyIsFollow = async () => {
-    const authUser: UserType = await getAuthUser();
-
-    if(!userInfo) return;
-
-    if(authUser != null) {
-      const follower = await getOwnFollowUsers(authUser.id, userInfo.id);
-      if(follower && follower.length != 0) {
-        setIsFollow(true);
-      }
-    }
-  }
-
-  const addFollowerNum = async() => {
-    setFollowerNum(followerNum + 1);
-    setIsFollow(true);
-    
-    const authUser: UserType = await getAuthUser();
-    await addFollowUser(authUser.id, userInfo.id)
-  }
-
-  const deleteFollowerNum = async () => {
-    setFollowerNum(followerNum - 1);
-    setIsFollow(false);
-
-    const authUser: UserType = await getAuthUser();
-    const follower = await getOwnFollowUsers(authUser.id, userInfo.id);
-    await deleteFollowUser(follower[0].id);
   }
 
   return (
     <Layout title='Profile'>
-      <div className="flex flex-row h-auto mb-4 mx-auto">
-        {
-          userProfile &&
-          <>
-            <div className='basis-3/12'>
-              {
-                (userProfile.iconImg)
-                ? <img className='rounded' 
-                    src={userProfile.iconImg} />
-                : <img className='rounded-full' 
-                    src="https://api-dyie.onrender.com/media/default.png" />
-              }
-            </div>
-            {/* <div className='basis-9/12 md:basis-2/4 m-2'> */}
-            <div className='basis-9/12 md:basis-2/4 m-2 md:m-10'>
-              <div className='h-1/3'>
-                <h2 className='font-bold text-2xl text-center m-auto'>{userInfo && userInfo.username}</h2>
-              </div>
-              <p>{userProfile.introduction}</p>
-              {userProfile.birthDay &&
-              <p>誕生日: {userProfile.birthDay}</p>}
-              {isAuthUser 
-                && <Link href={`/profile/${userInfo.id}/profile-edit`}>
-                  <a className='text-red-300'>プロフィールを編集する</a>
-                </Link>}
-            </div>
-          </>          
-        }
+      <Profile userInfo={userInfo} userProfile={userProfile} isAuth={isAuthUser} />
 
-      </div>
-
-      <div className='flex flex-row'>
-        <p className='basis-20'>フォロー: {followNum}</p>
-        <p className='basis-20'>フォロワー: {followerNum}</p>
-      </div>
+      <FollowerView userInfo={userInfo} follows={follows} followers={followers}
+        isAuth={isAuthUser} authUser={authUser}/>
 
       {isAuthUser 
         && <Link href={`/`}>
           <a>タイムラインを見る</a>
-        </Link>} 
+        </Link>}
 
-      {isLogin 
-        && (
-          isAuthUser
-          || (isFollow ?
-            <button onClick={() => deleteFollowerNum()}>フォローを解除する</button>
-            : <button onClick={() => addFollowerNum()}>フォローする</button>))}
-
-      {
-        (userInfo && userInfo.id !== 0) &&
-        <>
-          <div className='my-2 mx-auto max-w-sm'>
-            <p className='text-blue-600'>目標</p>
-            {(targets && targets.length > 0) &&
-              <TargetItem target={targets[0]} statuses={targetStatuses} />
-            }
-            {isAuthUser 
-              && <Link href={`/profile/${userInfo.id}/targets/add`}>
-                <a className="border rounded border-blue-400 text-blue-400">追加</a>
-              </Link>}
-            <Link href={`/profile/${userInfo.id}/targets`}>
-              <a className='border-b border-blue-400 text-blue-400 hover:border-blue-600 hover:text-blue-600'>目標一覧を見る</a>
-            </Link>
-          </div>
-
-          <div className='my-2 mx-auto max-w-sm'>
-            <p className='text-yellow-500'>資格結果</p>
-            {(certifications && certifications.length) > 0 && 
-              <CertificationItem certification={certifications[0]} categories={certificationCategories} />
-            }
-            {isAuthUser 
-              && <Link href={`/profile/${userInfo.id}/certifications/add`}>
-                <a className="border rounded border-yellow-400 text-yellow-400">追加</a>
-              </Link>}
-            <Link href={`/profile/${userInfo.id}/certifications`}>
-              <a className='border-b border-yellow-400 text-yellow-400 hover:border-yellow-500 hover:text-yellow-500'>資格結果一覧を見る</a>
-            </Link>
-          </div>
-
-          <div className='my-2 mx-auto max-w-sm'>
-            <p className='text-green-600'>勉強記録</p>
-            {(studies && studies.length > 0) &&
-              <StudyItem study={studies[0]}/>
-            }
-            {isAuthUser 
-              && <Link href={`/profile/${userInfo.id}/studies/add`}>
-                <a className="border rounded border-green-400 text-green-400">追加</a>
-              </Link>}
-            <Link href={`/profile/${userInfo.id}/studies`}>
-              <a className='border-b border-green-400 text-green-400 hover:border-green-600 hover:text-green-600'>勉強記録一覧を見る</a>
-            </Link>
-          </div>
-        </>
-      }
-
+      <ItemList userInfo={userInfo} isAuth={isAuthUser} 
+        targets={targets} targetStatuses={targetStatuses} studies={studies} 
+        certifications={certifications} certificationCategories={certificationCategories}/>
     </Layout>
   )
 }
@@ -251,6 +112,7 @@ export async function getStaticProps({ params }: any) {
       followers,
     },
     revalidate: 3,
+    notFound: !userInfo || userInfo.id == 0,
   }
 }
 

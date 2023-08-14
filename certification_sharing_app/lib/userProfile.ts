@@ -13,9 +13,9 @@ export async function getUserProfile(id: string): Promise<UserProfile> {
   }
   
   const userProfile = await sendRequest<UserProfile>(initValue, `api/users/${id}/profile/`, "GET", false)
-  console.log(userProfile)
   return userProfile;
 }
+
 export async function createUserProfile(id: number): Promise<void>
 {
   const initValue: UserProfile = {

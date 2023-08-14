@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { StudyType } from "../type/Study.type";
+import { StudyType } from "../../type/Study.type";
   
 const StudyItem: FC<{study: StudyType}> = ({study}) => {
     return (

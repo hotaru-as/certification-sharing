@@ -1,13 +1,13 @@
 import type { NextPage } from 'next'
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import StudyItem from '../../../../components/StudyItem';
+
+import ItemListLayout from '../../../../components/Layout/ItemListLayout';
+import Layout from '../../../../components/Layout/Layout';
+import StudyItem from '../../../../components/Item/StudyItem';
+
 import { getAllUserIds, getUser } from '../../../../lib/accounts';
 import { getUserStudies } from '../../../../lib/study';
 import { StudyType } from '../../../../type/Study.type';
 import { UserType } from '../../../../type/User.type';
-import Layout from '../../../../components/Layout/Layout';
-import ItemListLayout from '../../../../components/Layout/ItemListLayout';
 
 type studiesType = {
   userInfo: UserType;
@@ -38,6 +38,7 @@ export async function getStaticProps({ params }: any) {
       studies,
     },
     revalidate: 3,
+    notFound: !userInfo || userInfo.id == 0,
   }
 }
 

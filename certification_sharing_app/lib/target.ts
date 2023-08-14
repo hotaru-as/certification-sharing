@@ -2,6 +2,9 @@ import { URLSearchParams } from "next/dist/compiled/@edge-runtime/primitives/url
 import { TargetType } from "../type/Target.type";
 import { sendRequest } from "./common";
 import { TargetStatus } from "../type/TargetStatus.type";
+import { PostType } from "../type/Post.type";
+import { UserType } from "../type/User.type";
+import { UserProfile } from "../type/UserProfile.type";
 
 export async function getTargetStatuses(): Promise<TargetStatus[]>
 {
@@ -63,4 +66,33 @@ export async function createUserTarget(
 
   await sendRequest<TargetType[]>(initValue, `api/targets/`, "POST", true, body);
   return;
+}
+
+export async function convertTargetsToPosts(user: UserType, userProfile: UserProfile)
+  : Promise<PostType[]>
+{
+  const posts: PostType[] = [];
+  const targetStatuses = await getTargetStatuses();
+
+  const targets: TargetType[] = await getUserTargets(user.id);
+  targets.map((target: TargetType) => {
+    const targetStatus = targetStatuses.find((status: TargetStatus) => status.id.toString() == target.status)
+    if(targetStatus == null) return;
+    const targetStatusName = targetStatus.name
+
+    const post: PostType = {
+      id: target.id,
+      user_id: user.id,
+      user_name: user.username,
+      user_img: userProfile.iconImg ? userProfile.iconImg : "http://127.0.0.1:8000/media/hotaru.png",
+      post_type: "target",
+      result: `${user.username}さんが目標"${target.target}"を更新しました！`,
+      status: `ステータス: ${targetStatusName}`,
+      comment: target.comment,
+      createdAt: target.createdAt
+    }
+    posts.push(post)  
+  });
+
+  return posts;
 }

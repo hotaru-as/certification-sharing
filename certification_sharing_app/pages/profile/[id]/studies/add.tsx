@@ -1,14 +1,16 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getAllUserIds, getAuthUser, getUser } from "../../../../lib/accounts";
-import { createUserStudy } from "../../../../lib/study";
-import { UserType } from "../../../../type/User.type";
-import Layout from "../../../../components/Layout/Layout";
+
 import AddItemCardLayout from "../../../../components/Layout/EditItem/AddItemCardLayout";
-import UpdateCancelButtonLayout from "../../../../components/Layout/EditItem/UpdateCancelButtonLayout";
+import AuthLayout from "../../../../components/Layout/AuthLayout";
 import InputLayout from "../../../../components/Layout/EditItem/InputLayout";
 import TextAreaLayout from "../../../../components/Layout/EditItem/TextAreaLayout";
+import UpdateCancelButtonLayout from "../../../../components/Layout/EditItem/UpdateCancelButtonLayout";
+
+import { getAllUserIds, getUser, verifyIsOwnUser } from "../../../../lib/accounts";
+import { createUserStudy } from "../../../../lib/study";
+import { UserType } from "../../../../type/User.type";
 
 type TargetAddType = {
   userInfo: UserType,
@@ -24,23 +26,12 @@ const StudyAddPage: NextPage<TargetAddType> = ({userInfo}) => {
   const [comment, setComment] = useState("");
 
   useEffect(() => {
-    verifyIsOwnUser();
+    verifyIsOwnUser2();
   }, []);
   
-  const verifyIsOwnUser = async () => {
-    const ownUser: UserType = await getAuthUser();
-
-    if(ownUser == null){
-      setIsOwnUser(false);
-      return;
-    }
-
-    if(ownUser.id == userInfo.id)
-    {
-      setIsOwnUser(true);
-      return;
-    }
-    setIsOwnUser(false);    
+  const verifyIsOwnUser2 = async () => {
+    const isOwnUser = await verifyIsOwnUser(userInfo);
+    setIsOwnUser(isOwnUser);
   }
 
   const addStudy = async () => {
@@ -53,25 +44,23 @@ const StudyAddPage: NextPage<TargetAddType> = ({userInfo}) => {
 
   return (
     <>
-      <Layout title="StudyEdit">
-        {isOwnUser && (
-          <AddItemCardLayout color="green" itemTitle="勉強記録を登録する">
-            <InputLayout name="勉強内容" type="text" value={content}
-              onChangeMethod={(evt) => setContent(evt.target.value)} />
+      <AuthLayout title="StudyEdit" isAuth={isOwnUser}>
+        <AddItemCardLayout color="green" itemTitle="勉強記録を登録する">
+          <InputLayout name="勉強内容" type="text" value={content}
+            onChangeMethod={(evt) => setContent(evt.target.value)} />
 
-            <InputLayout name="開始時刻" type="datetime-local" value={startTime}
-              onChangeMethod={(evt) => setStartTime(evt.target.value)} />
+          <InputLayout name="開始時刻" type="datetime-local" value={startTime}
+            onChangeMethod={(evt) => setStartTime(evt.target.value)} />
 
-            <InputLayout name="終了時刻" type="datetime-local" value={endTime}
-              onChangeMethod={(evt) => setEndTime(evt.target.value)} />
+          <InputLayout name="終了時刻" type="datetime-local" value={endTime}
+            onChangeMethod={(evt) => setEndTime(evt.target.value)} />
 
-            <TextAreaLayout name="コメント" value={comment}
-              onChangeMethod={(evt) => setComment(evt.target.value)}/>
+          <TextAreaLayout name="コメント" value={comment}
+            onChangeMethod={(evt) => setComment(evt.target.value)}/>
 
-            <UpdateCancelButtonLayout name="追加" color="green" updateOnClickMethod={() => addStudy()}/>
-          </AddItemCardLayout>
-        )}
-      </Layout>
+          <UpdateCancelButtonLayout name="追加" color="green" updateOnClickMethod={() => addStudy()}/>
+        </AddItemCardLayout>
+      </AuthLayout>
     </>
   )
 }
@@ -87,6 +76,7 @@ export async function getStaticProps({ params }: any)
       userInfo,
     },
     revalidate: 3,
+    notFound: !userInfo || userInfo.id == 0,
   }
 }
 

@@ -1,14 +1,14 @@
 import type { NextPage } from 'next'
-import CertificationItem from '../../../../components/CertificationItem'
-import type { CertificationType } from '../../../../type/Certification.type'
-import { UserType } from '../../../../type/User.type'
+
+import CertificationItem from '../../../../components/Item/CertificationItem'
+import ItemListLayout from '../../../../components/Layout/ItemListLayout'
+import Layout from '../../../../components/Layout/Layout'
+
 import { getAllUserIds, getUser } from '../../../../lib/accounts'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
 import { getCertificationCategories, getUserCertifications } from '../../../../lib/certification'
 import { CertificationCategory } from '../../../../type/CertificationCategory.type'
-import Layout from '../../../../components/Layout/Layout'
-import ItemListLayout from '../../../../components/Layout/ItemListLayout'
+import { CertificationType } from '../../../../type/Certification.type'
+import { UserType } from '../../../../type/User.type'
 
 type certificationsType = {
   userInfo: UserType;
@@ -42,6 +42,7 @@ export async function getStaticProps({ params }: any) {
       certificationCategories,
     },
     revalidate: 3,
+    notFound: !userInfo || userInfo.id == 0,
   }
 }
 

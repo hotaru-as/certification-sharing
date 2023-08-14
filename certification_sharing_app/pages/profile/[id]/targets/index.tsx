@@ -1,14 +1,14 @@
 import type { NextPage } from 'next'
-import { TargetType } from '../../../../type/Target.type';
-import TargetItem from '../../../../components/TargetItem';
-import { getAllUserIds, getUser } from '../../../../lib/accounts';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import { getTargetStatuses, getUserTargets } from '../../../../lib/target';
-import { TargetStatus } from '../../../../type/TargetStatus.type';
-import { UserType } from '../../../../type/User.type';
+
 import Layout from '../../../../components/Layout/Layout';
 import ItemListLayout from '../../../../components/Layout/ItemListLayout';
+import TargetItem from '../../../../components/Item/TargetItem';
+
+import { getAllUserIds, getUser } from '../../../../lib/accounts';
+import { getTargetStatuses, getUserTargets } from '../../../../lib/target';
+import { TargetType } from '../../../../type/Target.type';
+import { TargetStatus } from '../../../../type/TargetStatus.type';
+import { UserType } from '../../../../type/User.type';
 
 type targetsType = {
   userInfo: UserType,
@@ -43,6 +43,7 @@ export async function getStaticProps({ params }: any) {
       targetStatuses,
     },
     revalidate: 3,
+    notFound: !userInfo || userInfo.id == 0,
   }
 }
 

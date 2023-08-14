@@ -104,3 +104,19 @@ export async function getAllUser(): Promise<UserType[]> {
   const users = await sendRequest<UserType[]>(initValue, `accounts/users`, "GET", false)
   return users;
 }
+
+export async function verifyIsOwnUser(userInfo: UserType): Promise<boolean> {
+  if(!userInfo) return false;
+
+  const ownUser: UserType = await getAuthUser();
+  if(ownUser == null){
+    return false;
+  }
+
+  if(ownUser.id == userInfo.id)
+  {
+    return true;
+  }
+
+  return false;
+}

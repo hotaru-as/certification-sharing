@@ -14,8 +14,6 @@ export async function sendRequest<T>(initValue: T, uri: string, method: string, 
     }
   }
   
-  // body = {body: JSON.stringify({})}
-
   const request: RequestInit = {
     method: `${method}`,
     headers: headers,
