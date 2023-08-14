@@ -52,9 +52,9 @@ const TargetAddPage: NextPage<TargetAddType> = ({ userInfo, targetStatuses }) =>
           <InputLayout name="達成期限" type="date" value={deadline}
             onChangeMethod={(evt) => setDeadline(evt.target.value)} />
           
-          <SelectLayout name="ステータス" defaultValue={targetStatuses[0].id}
+          <SelectLayout name="ステータス" defaultValue={0}
             onChangeMethod={(evt) => setStatus(Number(evt.target.value))}>
-            {targetStatuses.map((status: any) => 
+            {targetStatuses && targetStatuses.map((status: any) => 
               <option key={status.id} value={status.id}>{status.name}</option>
             )}
           </SelectLayout>

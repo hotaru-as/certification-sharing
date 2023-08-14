@@ -54,9 +54,9 @@ const CertificationAddPage: NextPage<CertificationAddType> = ({userInfo, certifi
     <>
       <AuthLayout title="CertificationEdit" isAuth={isOwnUser}>
         <AddItemCardLayout color="yellow" itemTitle="資格結果を新規登録する">
-          <SelectLayout name="資格" defaultValue={certificationCategories[0].id}
+          <SelectLayout name="資格" defaultValue={0}
             onChangeMethod={(evt) => setCertification(Number(evt.target.value))}>
-            {certificationCategories.map((category: CertificationCategory) => 
+            {certificationCategories && certificationCategories.map((category: CertificationCategory) => 
               <option key={category.id} value={category.id}>{category.name}</option>
             )}
           </SelectLayout>
