@@ -79,9 +79,9 @@ export default function FollowerView({ userInfo, follows, followers }: LayoutPro
 
   return (
     <>
-      <div className='flex flex-row'>
-        <p className='basis-20'>フォロー: {followNum}</p>
-        <p className='basis-20'>フォロワー: {followerNum}</p>
+      <div className='md:flex md:flex-row'>
+        <p className='md:basis-20'>フォロー: {followNum}</p>
+        <p className='md:basis-20'>フォロワー: {followerNum}</p>
       </div>
 
       {(isLogin && !isAuthUser)

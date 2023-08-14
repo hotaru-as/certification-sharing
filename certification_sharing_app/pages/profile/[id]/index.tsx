@@ -65,9 +65,11 @@ const ProfilePage: NextPage<profileType> = (props) => {
       <FollowerView userInfo={userInfo} follows={follows} followers={followers} />
 
       {isAuthUser 
-        && <Link href={`/`}>
-          <a>タイムラインを見る</a>
-        </Link>}
+        && <div className='mt-2'>
+          <Link href={`/`}>
+            <a className='text-pink-600'>タイムラインを見る</a>
+          </Link>
+        </div>}
 
       <ItemList userInfo={userInfo} isAuth={isAuthUser} 
         targets={targets} targetStatuses={targetStatuses} studies={studies} 

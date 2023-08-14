@@ -6,12 +6,41 @@ type LayoutProps = {
   itemTitle: string
 }
 
-export default function AddItemCardLayout({ children, color = "pink", itemTitle = "" }: LayoutProps) {
-  const bgColor = `bg-${color}-200`;
-  const divCss = `m-4 border rounded-tr-2xl w-80 ${bgColor}`
+const getDivCss = (color: string) => {
+  switch(color)
+  {
+    case "pink":
+      return "m-4 border rounded-tr-2xl w-80 bg-pink-200"
+    case "yellow":
+      return "m-4 border rounded-tr-2xl w-80 bg-yellow-200"
+    case "green":
+      return "m-4 border rounded-tr-2xl w-80 bg-green-200"
+    case "blue":
+      return "m-4 border rounded-tr-2xl w-80 bg-blue-200"
+    default:
+      return "m-4 border rounded-tr-2xl w-80 bg-pink-200"
+  }
+}
 
-  const textColor = `text-${color}-600`;
-  const titleCss = `font-semibold ml-1 mt-1 ${textColor}`
+const getTitleCss = (color: string) => {
+  switch(color)
+  {
+    case "pink":
+      return "font-semibold ml-1 mt-1 text-pink-600"
+    case "yellow":
+      return "font-semibold ml-1 mt-1 text-yellow-600"
+    case "green":
+      return "font-semibold ml-1 mt-1 text-green-600"
+    case "blue":
+      return "font-semibold ml-1 mt-1 text-blue-600"
+    default:
+      return "font-semibold ml-1 mt-1 text-pink-600"
+  }
+}
+
+export default function AddItemCardLayout({ children, color = "pink", itemTitle = "" }: LayoutProps) {
+  const divCss = getDivCss(color)
+  const titleCss = getTitleCss(color)
 
   return (
     <div className={divCss}>
