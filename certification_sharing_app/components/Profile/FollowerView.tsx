@@ -1,71 +1,79 @@
 import { useEffect, useState } from "react";
 import { Follower } from "../../type/Follower.type";
 import { UserType } from "../../type/User.type";
-import { getAuthUser } from "../../lib/accounts";
+import { getAuthUser, verifyIsOwnUser } from "../../lib/accounts";
 import { addFollowUser, deleteFollowUser, getOwnFollowUsers } from "../../lib/follower";
 
 type LayoutProps = {
   userInfo: UserType;
   follows: Follower[];
   followers: Follower[];
-  isAuth: boolean
-  authUser: UserType | undefined
 }
 
-export default function FollowerView({ userInfo, follows, followers, isAuth, authUser }: LayoutProps) {
+export default function FollowerView({ userInfo, follows, followers }: LayoutProps) {
+  const [isAuthUser, setIsAuthUser] = useState(false);
   const [isFollow, setIsFollow] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [loginUser, setLoginUser] = useState<UserType | undefined>(undefined)
 
   const [followerNum, setFollowerNum] = useState(followers ? followers.length : 0);
   const followNum = follows ? follows.length : 0;
 
   useEffect(() => {
-    verifyIsLogin();
+    prepare();
   }, [])
 
-  useEffect(() => {
-    verifyIsFollow();
-  }, [])
+  const prepare = async () => {
+    const isOwnUser = await verifyIsAuthUser();
+    const loginUser = await getLoginUser();
+    const isLogin = loginUser ? true : false;
+    const isFollow = await verifyIsFollow(isOwnUser, loginUser);
 
-  const verifyIsLogin = async () => {
-    const authUser: UserType = await getAuthUser();
+    setIsAuthUser(isOwnUser);
+    setIsLogin(isLogin);
+    setLoginUser(loginUser);
+    setIsFollow(isFollow);
+  }
 
-   if(Object.keys(authUser).length !== 0)
-    {
-      setIsLogin(true);
-      return;
-    }
+  const verifyIsAuthUser = async () => {
+    const isOwnUser = await verifyIsOwnUser(userInfo);
+    return isOwnUser;
+  }
 
-    setIsLogin(false);
+  const getLoginUser = async () => {
+    const loginUser: UserType = await getAuthUser();
+    return (loginUser && loginUser.id !== 0) ? loginUser : undefined;
   }
   
-  const verifyIsFollow = async () => {
-    if(!userInfo || !isAuth || !isLogin) return;
+  const verifyIsFollow = async (isOwnUser: boolean, loginUser: UserType | undefined) => {
+    if(!userInfo || isOwnUser || !loginUser) return false;
 
-    if(authUser) {
-      const follower = await getOwnFollowUsers(authUser.id, userInfo.id);
+    if(loginUser) {
+      const follower = await getOwnFollowUsers(loginUser.id, userInfo.id);
       if(follower && follower.length != 0) {
-        setIsFollow(true);
+        return true;
       }
     }
+
+    return false;
   }
 
   const addFollowerNum = async() => {
-    if(!authUser) return;
+    if(!loginUser) return;
 
     setFollowerNum(followerNum + 1);
     setIsFollow(true);
     
-    await addFollowUser(authUser.id, userInfo.id)
+    await addFollowUser(loginUser.id, userInfo.id)
   }
 
   const deleteFollowerNum = async () => {
-    if(!authUser) return;
+    if(!loginUser) return;
 
     setFollowerNum(followerNum - 1);
     setIsFollow(false);
 
-    const follower = await getOwnFollowUsers(authUser.id, userInfo.id);
+    const follower = await getOwnFollowUsers(loginUser.id, userInfo.id);
     await deleteFollowUser(follower[0].id);
   }
 
@@ -76,12 +84,13 @@ export default function FollowerView({ userInfo, follows, followers, isAuth, aut
         <p className='basis-20'>フォロワー: {followerNum}</p>
       </div>
 
-      {isLogin 
+      {(isLogin && !isAuthUser)
         && (
-          isAuth
-          || (isFollow ?
-            <button onClick={() => deleteFollowerNum()}>フォローを解除する</button>
-            : <button onClick={() => addFollowerNum()}>フォローする</button>))}
+          isFollow 
+            ? <button onClick={() => deleteFollowerNum()}>フォローを解除する</button>
+            : <button onClick={() => addFollowerNum()}>フォローする</button>
+        )
+      }
     </>
   )
 }

@@ -16,7 +16,7 @@ import { TargetType } from '../../../type/Target.type'
 import { UserProfile } from '../../../type/UserProfile.type'
 import { UserType } from '../../../type/User.type'
 
-import { getAllUserIds, getAuthUser, getUser, verifyIsOwnUser } from '../../../lib/accounts'
+import { getAllUserIds, getUser, verifyIsOwnUser } from '../../../lib/accounts'
 import { getCertificationCategories, getUserCertifications } from '../../../lib/certification'
 import { getFollowedUsers, getFollowUsers } from '../../../lib/follower'
 import { getUserStudies } from '../../../lib/study'
@@ -48,7 +48,6 @@ const ProfilePage: NextPage<profileType> = (props) => {
   const certificationCategories = props.certificationCategories;
 
   const [isAuthUser, setIsAuthUser] = useState(false);
-  const [authUser, setAuthUser] = useState<UserType | undefined>(undefined);
 
   useEffect(() => {
     verifyIsAuthUser();
@@ -57,20 +56,13 @@ const ProfilePage: NextPage<profileType> = (props) => {
   const verifyIsAuthUser = async () => {
     const isOwnUser =await verifyIsOwnUser(userInfo);
     setIsAuthUser(isOwnUser);
-
-    if(isOwnUser)
-    {
-      const authUser: UserType = await getAuthUser();
-      setAuthUser(authUser)
-    }
   }
 
   return (
     <Layout title='Profile'>
       <Profile userInfo={userInfo} userProfile={userProfile} isAuth={isAuthUser} />
 
-      <FollowerView userInfo={userInfo} follows={follows} followers={followers}
-        isAuth={isAuthUser} authUser={authUser}/>
+      <FollowerView userInfo={userInfo} follows={follows} followers={followers} />
 
       {isAuthUser 
         && <Link href={`/`}>
