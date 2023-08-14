@@ -6,7 +6,8 @@ import { getAllUserIds, getUser } from '../../../../lib/accounts';
 import { getUserStudies } from '../../../../lib/study';
 import { StudyType } from '../../../../type/Study.type';
 import { UserType } from '../../../../type/User.type';
-import Layout from '../../../../components/Layout';
+import Layout from '../../../../components/Layout/Layout';
+import ItemListLayout from '../../../../components/Layout/ItemListLayout';
 
 type studiesType = {
   userInfo: UserType;
@@ -14,21 +15,13 @@ type studiesType = {
 }
 
 const StudyPage: NextPage<studiesType> = ({userInfo, studies}) => {
-  const router = useRouter();
-
   return (
     <Layout title='Studies'>
-      <div className='my-2 max-w-sm'>
-        <p className='text-green-600'>{userInfo && userInfo.username}さんの勉強記録一覧</p>
-
+      <ItemListLayout color='green' userInfo={userInfo} title='さんの勉強記録一覧'>
         {studies && studies.map((study: StudyType) => 
           <StudyItem key={study.id} study={study} />
         )}
-
-        <Link href="#">
-          <a className="text-green-400" onClick={() => router.back()}>ユーザーページに戻る</a>
-        </Link>
-      </div>
+      </ItemListLayout>
     </Layout>
   )
 }

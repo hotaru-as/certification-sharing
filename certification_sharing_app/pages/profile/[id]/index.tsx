@@ -18,7 +18,7 @@ import { getUserStudies } from '../../../lib/study'
 import { getCertificationCategories, getUserCertifications } from '../../../lib/certification'
 import { TargetStatus } from '../../../type/TargetStatus.type'
 import { CertificationCategory } from '../../../type/CertificationCategory.type'
-import Layout from '../../../components/Layout'
+import Layout from '../../../components/Layout/Layout'
 
 type profileType = {
   userInfo: UserType;
@@ -134,7 +134,7 @@ const ProfilePage: NextPage<profileType> = (props) => {
                 ? <img className='rounded' 
                     src={userProfile.iconImg} />
                 : <img className='rounded-full' 
-                    src="http://127.0.0.1:8000/media/hotaru.png" />
+                    src="https://api-dyie.onrender.com/media/default.png" />
               }
             </div>
             {/* <div className='basis-9/12 md:basis-2/4 m-2'> */}

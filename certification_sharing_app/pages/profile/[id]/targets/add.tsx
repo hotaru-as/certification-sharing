@@ -5,7 +5,12 @@ import { getAllUserIds, getAuthUser, getUser } from "../../../../lib/accounts";
 import { createUserTarget, getTargetStatuses } from "../../../../lib/target";
 import { TargetStatus } from "../../../../type/TargetStatus.type";
 import { UserType } from "../../../../type/User.type";
-import Layout from "../../../../components/Layout";
+import Layout from "../../../../components/Layout/Layout";
+import AddItemCardLayout from "../../../../components/Layout/EditItem/AddItemCardLayout";
+import InputLayout from "../../../../components/Layout/EditItem/InputLayout";
+import SelectLayout from "../../../../components/Layout/EditItem/SelectLayout";
+import TextAreaLayout from "../../../../components/Layout/EditItem/TextAreaLayout";
+import UpdateCancelButtonLayout from "../../../../components/Layout/EditItem/UpdateCancelButtonLayout";
 
 type TargetAddType = {
   userInfo: UserType,
@@ -48,50 +53,29 @@ const TargetAddPage: NextPage<TargetAddType> = ({ userInfo, targetStatuses }) =>
   
   return (
     <>
-      {
-        isOwnUser && 
-        (
-          <Layout title="TargetEdit">
-            <div className="m-4 border rounded-tr-2xl bg-blue-200 w-80">
-              <h2 className="font-semibold text-blue-600 ml-1 mt-1">目標を設定する</h2>
-              <label className="flex flex-rows p-2">
-                <p className="basis-20">目標</p>
-                <input className="border border-gray-800 basis-auto"
-                  type="text" value={target || ""}
-                  onChange={(evt) => setTarget(evt.target.value)} />
-              </label>
-              <label className="flex flex-rows p-2">
-                <p className="basis-20">達成期限</p>
-                <input className="border border-gray-800 basis-auto"
-                  type="date" value={deadline || ""}
-                  onChange={(evt) => setDeadline(evt.target.value)} />
-              </label>
-              <label className="flex flex-rows p-2">
-                <p className="basis-20">ステータス</p>
-                <select className="border border-gray-800 basis-auto"
-                  onChange={(evt) => setStatus(Number(evt.target.value))}
-                  defaultValue={targetStatuses[0].id}>
-                  {targetStatuses.map((status: any) => 
-                    <option key={status.id} value={status.id}>{status.name}</option>
-                  )}
-                </select>
-              </label>
-              <label className="flex flex-rows p-2">
-                <p className="basis-20">コメント</p>
-                <textarea className="border border-gray-800 basis-auto"
-                  value={comment || ""}
-                  onChange={(evt) => setComment(evt.target.value)} />
-              </label>
-              <div className="flex flex-rows">
-                <button className="border border-blue-600 basis-20 m-1 rounded bg-blue-600 text-white"
-                  onClick={() => addTarget()}>更新</button>
-                <button className="border border-blue-600 basis-20 m-1 rounded text-blue-600"
-                  onClick={() => router.back()}>キャンセル</button>
-              </div>
-            </div>
-          </Layout>
-        )
-      }
+      <Layout title="StudyEdit">
+        {isOwnUser && (
+          <AddItemCardLayout color="blue" itemTitle="目標を設定する">
+            <InputLayout name="目標" type="text" value={target}
+              onChangeMethod={(evt) => setTarget(evt.target.value)} />
+
+            <InputLayout name="達成期限" type="date" value={deadline}
+              onChangeMethod={(evt) => setDeadline(evt.target.value)} />
+            
+            <SelectLayout name="ステータス" defaultValue={targetStatuses[0].id}
+              onChangeMethod={(evt) => setStatus(Number(evt.target.value))}>
+              {targetStatuses.map((status: any) => 
+                <option key={status.id} value={status.id}>{status.name}</option>
+              )}
+            </SelectLayout>
+
+            <TextAreaLayout name="コメント" value={comment}
+              onChangeMethod={(evt) => setComment(evt.target.value)}/>
+
+            <UpdateCancelButtonLayout name="追加" color="blue" updateOnClickMethod={() => addTarget()}/>
+          </AddItemCardLayout>
+        )}
+      </Layout>
     </>
   )
 }

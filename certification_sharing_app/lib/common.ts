@@ -29,7 +29,7 @@ export async function sendRequest<T>(initValue: T, uri: string, method: string, 
     )
     .then((res) => {
       if (!res.ok) {
-        throw "authentication failed";
+        throw "fetch failed";
       } else {
         return res.json()
       }

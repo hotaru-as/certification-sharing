@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import TimeLine from '../components/TimeLine'
 import LoginPrompt from '../components/LoginPrompt'
-import Layout from '../components/Layout'
+import Layout from '../components/Layout/Layout'
 import { getAllUser, getAuthUser, getUser } from '../lib/accounts'
 import { useEffect, useState } from 'react'
 import { UserType } from '../type/User.type'

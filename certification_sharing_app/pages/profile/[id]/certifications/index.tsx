@@ -7,7 +7,8 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { getCertificationCategories, getUserCertifications } from '../../../../lib/certification'
 import { CertificationCategory } from '../../../../type/CertificationCategory.type'
-import Layout from '../../../../components/Layout'
+import Layout from '../../../../components/Layout/Layout'
+import ItemListLayout from '../../../../components/Layout/ItemListLayout'
 
 type certificationsType = {
   userInfo: UserType;
@@ -16,21 +17,13 @@ type certificationsType = {
 }
 
 const CertificationsPage: NextPage<certificationsType> = ({userInfo, certifications, certificationCategories}) => {
-  const router = useRouter();
-
   return (
     <Layout title='Certifications'>
-      <div className='my-2 max-w-sm'>
-        <p className='text-yellow-600'>{userInfo && userInfo.username}さんの資格受験結果一覧</p>
-
+      <ItemListLayout color='yellow' userInfo={userInfo} title='さんの資格受験結果一覧'>
         {certifications && certifications.map((certification: CertificationType) => 
           <CertificationItem key={certification.id} certification={certification} categories={certificationCategories} />
         )}
-
-        <Link href="#">
-          <a className="text-yellow-400" onClick={() => router.back()}>ユーザーページに戻る</a>
-        </Link>
-      </div>
+      </ItemListLayout>
     </Layout>
   )
 }

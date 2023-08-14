@@ -5,7 +5,10 @@ import { UserType } from '../../../type/User.type'
 import { useRouter } from 'next/router'
 import { getUserProfile, updateUserProfile } from '../../../lib/userProfile'
 import { UserProfile } from '../../../type/UserProfile.type'
-import Layout from '../../../components/Layout'
+import Layout from '../../../components/Layout/Layout'
+import InputLayout from '../../../components/Layout/EditItem/InputLayout'
+import TextAreaLayout from '../../../components/Layout/EditItem/TextAreaLayout'
+import UpdateCancelButtonLayout from '../../../components/Layout/EditItem/UpdateCancelButtonLayout'
 
 type profileType = {
   userInfo: any,
@@ -51,39 +54,27 @@ const ProfilEditPage: NextPage<profileType> = ({userInfo, userProfile}) => {
   }
   
   return (
-    <Layout title='ProfileEdit'>
-    {
-      isOwnUser &&
-      (<>
-        <div className="m-4">
-          <h2 className="font-semibold text-pink-600 ml-1 mt-1">プロフィールを編集する</h2>
-          <label className="flex flex-rows p-1">
-            <p className="basis-20">アイコン</p>
-            <input  className="border border-gray-800 basis-auto"
-              type="file" onChange={evt => updateIcon(evt)}></input>
-          </label>
-          <label className="flex flex-rows p-1">
-            <p className="basis-20">自己紹介</p>
-            <textarea className="border border-gray-800 basis-1/3"
-              value={introduction || ""}
-              onChange={evt => setIntroduction(evt.target.value)}></textarea>
-          </label>
-          <label className="flex flex-rows p-1">
-            <p className="basis-20">誕生日</p>
-            <input className="border border-gray-800 basis-auto"
-              type="date" value={birthDay || ""}
-              onChange={evt => setBirthDay(evt.target.value)}></input>
-          </label>
-          <div className="flex flex-rows">
-            <button className="border border-pink-600 basis-20 m-1 rounded bg-pink-600 text-white"
-              onClick={() => updateProfile()}>更新</button>
-            <button className="border border-pink-600 basis-20 m-1 rounded text-pink-600"
-              onClick={() => router.back()}>キャンセル</button>
+    <>
+      <Layout title="ProfileEdit">
+        {isOwnUser && (
+          <div className="m-4">
+            <h2 className="font-semibold text-pink-600 ml-1 mt-1">プロフィールを編集する</h2>
+
+            <InputLayout name="アイコン" type="file" value={undefined}
+              onChangeMethod={evt => updateIcon(evt)} />
+
+            <TextAreaLayout name="自己紹介" value={introduction}
+              onChangeMethod={evt => setIntroduction(evt.target.value)}/>
+              
+            <InputLayout name="誕生日" type="date" value={birthDay}
+              onChangeMethod={evt => setBirthDay(evt.target.value)} />
+
+            <UpdateCancelButtonLayout name="更新" color="pink"
+              updateOnClickMethod={() => updateProfile()}/>
           </div>
-        </div>
-      </>)
-    }
-    </Layout>
+        )}
+      </Layout>
+    </>
   )
 }
 

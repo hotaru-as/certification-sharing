@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { getAllUserIds, getAuthUser, getUser } from "../../../../lib/accounts";
 import { createUserStudy } from "../../../../lib/study";
 import { UserType } from "../../../../type/User.type";
-import Layout from "../../../../components/Layout";
+import Layout from "../../../../components/Layout/Layout";
+import AddItemCardLayout from "../../../../components/Layout/EditItem/AddItemCardLayout";
+import UpdateCancelButtonLayout from "../../../../components/Layout/EditItem/UpdateCancelButtonLayout";
+import InputLayout from "../../../../components/Layout/EditItem/InputLayout";
+import TextAreaLayout from "../../../../components/Layout/EditItem/TextAreaLayout";
 
 type TargetAddType = {
   userInfo: UserType,
@@ -49,46 +53,25 @@ const StudyAddPage: NextPage<TargetAddType> = ({userInfo}) => {
 
   return (
     <>
-      {
-        isOwnUser &&
-        (
-          <Layout title="StudyEdit">
-            <div className="m-4 border rounded-tr-2xl bg-green-200 w-80">
-              <h2 className="font-semibold text-green-600 ml-1 mt-1">勉強記録を登録する</h2>
-              <label className="flex flex-rows p-2">
-                <p className="basis-20">勉強内容</p>
-                <input className="border border-gray-800 basis-auto"
-                  type="text" value={content || ""}
-                  onChange={(evt) => setContent(evt.target.value)} />
-              </label>
-              <label className="flex flex-rows p-2">
-                <p className="basis-20">開始時刻</p>
-                <input className="border border-gray-800 basis-auto"
-                  type="datetime-local" value={startTime || ""}
-                  onChange={(evt) => setStartTime(evt.target.value)} />
-              </label>
-              <label className="flex flex-rows p-2">
-                <p className="basis-20">終了時刻</p>
-                <input className="border border-gray-800 basis-auto"
-                  type="datetime-local" value={endTime || ""}
-                  onChange={(evt) => setEndTime(evt.target.value)} />
-              </label>
-              <label className="flex flex-rows p-2">
-                <p className="basis-20">コメント</p>
-                <textarea className="border border-gray-800 basis-auto"
-                  value={comment || ""}
-                  onChange={(evt) => setComment(evt.target.value)} />
-              </label>
-              <div className="flex flex-rows">
-                <button className="border border-green-600 basis-20 m-1 rounded bg-green-600 text-white"
-                  onClick={() => addStudy()}>更新</button>
-                <button className="border border-green-600 basis-20 m-1 rounded text-green-600"
-                  onClick={() => router.back()}>キャンセル</button>
-              </div>
-            </div>
-          </Layout>
-        )
-      }
+      <Layout title="StudyEdit">
+        {isOwnUser && (
+          <AddItemCardLayout color="green" itemTitle="勉強記録を登録する">
+            <InputLayout name="勉強内容" type="text" value={content}
+              onChangeMethod={(evt) => setContent(evt.target.value)} />
+
+            <InputLayout name="開始時刻" type="datetime-local" value={startTime}
+              onChangeMethod={(evt) => setStartTime(evt.target.value)} />
+
+            <InputLayout name="終了時刻" type="datetime-local" value={endTime}
+              onChangeMethod={(evt) => setEndTime(evt.target.value)} />
+
+            <TextAreaLayout name="コメント" value={comment}
+              onChangeMethod={(evt) => setComment(evt.target.value)}/>
+
+            <UpdateCancelButtonLayout name="追加" color="green" updateOnClickMethod={() => addStudy()}/>
+          </AddItemCardLayout>
+        )}
+      </Layout>
     </>
   )
 }
