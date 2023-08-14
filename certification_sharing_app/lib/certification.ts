@@ -86,7 +86,7 @@ export async function convertCertificationsToPosts(user: UserType, userProfile: 
       user_img: userProfile.iconImg ? userProfile.iconImg : "http://127.0.0.1:8000/media/hotaru.png",
       post_type: "certification",
       result: `${user.username}さんが${certificationName}の結果を報告しました！`,
-      status: `結果: ${certification.result}`,
+      status: `結果: ${certification.result ? "合格" : "不合格"}`,
       comment: certification.comment,
       createdAt: certification.createdAt
     }
