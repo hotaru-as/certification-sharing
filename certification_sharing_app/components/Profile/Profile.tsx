@@ -14,16 +14,18 @@ export default function Profile({ userInfo, userProfile, isAuth }: LayoutProps) 
     return <></>;
   }
 
+  const defaultImgUrl = "https://study-sharing.s3.ap-northeast-3.amazonaws.com/static/users/default.jpg"
+  
   return (
     <>
       <div className="flex flex-row h-auto mb-4 mx-auto">
         <div className='basis-3/12'>
           {
             (userProfile.iconImg)
-            ? <img className='rounded' 
+            ? <img className='rounded-full'
                 src={userProfile.iconImg} />
             : <img className='rounded-full' 
-                src="https://api-dyie.onrender.com/media/default.png" />
+                src={defaultImgUrl} />
           }
         </div>
 

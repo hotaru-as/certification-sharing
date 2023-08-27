@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
 import { UserType } from "../../type/User.type";
 import { getAuthUser, logout } from "../../lib/accounts";
+import { useRouter } from "next/router";
 
 type LayoutProps = {
     children: ReactNode,
@@ -11,6 +12,7 @@ type LayoutProps = {
 
 export default function Layout({ children, title = "Default title" }: LayoutProps) {
   const [isLogin, setIsLogin] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     getLoginUser();
@@ -24,6 +26,11 @@ export default function Layout({ children, title = "Default title" }: LayoutProp
 
   const setLogout = () => {
     logout()
+    router.push("/login")
+  }
+
+  const setLogin = () => {
+    router.push("/login")    
   }
 
   return (
@@ -34,13 +41,13 @@ export default function Layout({ children, title = "Default title" }: LayoutProp
       <header className="bg-red-200 h-auto">
         <div className="text-right px-2 pt-1">
 
-          <Link href={`/login`}>
+          <button>
             {
               isLogin
               ? <a className="text-white" onClick={() => setLogout()}>ログアウト</a>
-              : <a className="text-white">ログイン</a>
+              : <a className="text-white" onClick={() => setLogin()}>ログイン</a>
             }
-          </Link>
+          </button>
         </div>
         <Link href={`/`}>
           <a><h1 className="text-white text-center text-3xl pb-4 font-bold md:font-extrabold">Study Sharing</h1></a>

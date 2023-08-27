@@ -12,7 +12,11 @@ export async function getUserProfile(id: string): Promise<UserProfile> {
     iconImg: ""  
   }
   
+  const s3Url = "https://study-sharing.s3.ap-northeast-3.amazonaws.com/static/"
+
   const userProfile = await sendRequest<UserProfile>(initValue, `api/users/${id}/profile/`, "GET", false)
+  const iconImg = userProfile.iconImg;
+  userProfile.iconImg = iconImg ? `${s3Url}${iconImg}` : iconImg;
   return userProfile;
 }
 

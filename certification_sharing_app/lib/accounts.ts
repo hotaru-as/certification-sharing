@@ -36,7 +36,7 @@ export async function login(username: string, password: string): Promise<boolean
 
 export function logout(): void
 {
-  cookie.remove("access_token");
+  cookie.remove("access_token", { path: "/" });
 }
 
 export async function register(username: string, password: string): Promise<boolean>
