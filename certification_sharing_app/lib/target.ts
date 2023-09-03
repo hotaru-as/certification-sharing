@@ -84,7 +84,7 @@ export async function convertTargetsToPosts(user: UserType, userProfile: UserPro
       id: target.id,
       user_id: user.id,
       user_name: user.username,
-      user_img: userProfile.iconImg ? userProfile.iconImg : "http://127.0.0.1:8000/media/hotaru.png",
+      user_img: userProfile.iconImg,
       post_type: "target",
       result: `${user.username}さんが目標"${target.target}"を更新しました！`,
       status: `ステータス: ${targetStatusName}`,

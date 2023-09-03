@@ -21,11 +21,7 @@ export default function Profile({ userInfo, userProfile, isAuth }: LayoutProps) 
       <div className="flex flex-row h-auto mb-4 mx-auto">
         <div className='basis-3/12'>
           {
-            (userProfile.iconImg)
-            ? <img className='rounded-full'
-                src={userProfile.iconImg} />
-            : <img className='rounded-full' 
-                src={defaultImgUrl} />
+            <img className='rounded-full' src={userProfile.iconImg} />
           }
         </div>
 
